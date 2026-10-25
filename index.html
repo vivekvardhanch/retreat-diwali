@@ -1,0 +1,1649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Retreat Diwali Planning</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  --purple:#5b2a86; --indigo:#1f1b6f; --royal:#2543b8; --saffron:#ff8c1a;
+  --magenta:#c2185b; --pink:#ff4d8d; --gold:#f5b700; --warm:#fffaf2; --ink:#1d1630;
+  --muted:#6b6280; --good:#1f9d55; --warn:#e08a00; --bad:#d6336c; --card:#ffffff;
+  --radius:16px; --shadow:0 8px 24px rgba(61,28,107,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--warm)}
+body{min-height:100vh;background:
+  radial-gradient(1200px 600px at 10% -10%,#ffd36b55,transparent 60%),
+  radial-gradient(900px 500px at 110% 10%,#ff4d8d33,transparent 60%),
+  linear-gradient(180deg,#fff7ea,#fdf3ff 60%,#fff8ef);}
+header.hero{position:relative;overflow:hidden;color:#fff;padding:28px 20px 22px;
+  background:linear-gradient(120deg,var(--indigo),var(--purple) 45%,var(--magenta) 80%,var(--saffron));}
+.hero h1{margin:0;font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:.5px;font-family:Georgia,serif}
+.hero p{margin:4px 0 0;opacity:.9}
+.hero .sub{font-size:.9rem;opacity:.85}
+#sparkles{position:absolute;inset:0;pointer-events:none}
+.diyas{display:flex;justify-content:center;gap:18px;margin-top:12px;position:relative;z-index:1}
+.diya{width:26px;height:16px;border-radius:0 0 18px 18px;background:linear-gradient(#ffd45c,#ff8c1a);
+  box-shadow:0 0 14px 4px #ffc84a99;animation:flick 1.8s ease-in-out infinite}
+.diya:nth-child(2n){animation-delay:.4s}.diya:nth-child(3n){animation-delay:.9s}
+@keyframes flick{0%,100%{box-shadow:0 0 12px 3px #ffc84a88;transform:scale(1)}50%{box-shadow:0 0 22px 7px #ffe08acc;transform:scale(1.06)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+nav.tabs{position:sticky;top:0;z-index:20;display:flex;gap:6px;overflow-x:auto;padding:10px 12px;
+  background:rgba(255,250,242,.92);backdrop-filter:blur(6px);border-bottom:1px solid #e9dcf7}
+nav.tabs button{flex:0 0 auto;border:0;background:transparent;padding:8px 12px;border-radius:999px;
+  font-weight:600;color:var(--purple);cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected=true]{background:linear-gradient(90deg,var(--royal),var(--magenta));color:#fff;box-shadow:var(--shadow)}
+nav.tabs button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+main{padding:18px;max-width:1280px;margin:0 auto}
+section.panel{display:none;animation:fade .35s ease}
+section.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-family:Georgia,serif;color:var(--indigo);margin:4px 0 12px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 14px}
+.toolbar input,.toolbar select{padding:9px 12px;border:1px solid #d9cbe8;border-radius:10px;background:#fff;font:inherit}
+.toolbar .grow{flex:1 1 220px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer;color:#fff;
+  background:linear-gradient(90deg,var(--royal),var(--magenta));box-shadow:0 4px 12px rgba(194,24,91,.25)}
+.btn.ghost{background:#fff;color:var(--purple);border:1px solid #d9cbe8;box-shadow:none}
+.btn.danger{background:var(--bad)}
+.btn.small{padding:6px 10px;font-size:.85rem}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.card{background:var(--card);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);
+  border-top:4px solid var(--saffron);position:relative;overflow:hidden}
+.card:nth-child(3n){border-top-color:var(--royal)}.card:nth-child(3n+1){border-top-color:var(--magenta)}
+.card .label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.card .value{font-size:1.6rem;font-weight:800;margin-top:4px;color:var(--ink)}
+.card .hint{font-size:.8rem;color:var(--muted);margin-top:2px}
+.card.warn{border-top-color:var(--warn)}.card.bad{border-top-color:var(--bad)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}}
+.box{background:#fff;border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
+.box h3{margin:0 0 10px;font-size:1rem;color:var(--purple)}
+.bar{height:10px;border-radius:999px;background:#efe6fb;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--saffron),var(--magenta))}
+.barrow{margin:8px 0}
+.barrow .meta{display:flex;justify-content:space-between;font-size:.88rem}
+
+.table-wrap{overflow:auto;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:9px 10px;border-bottom:1px solid #f0e8f8;text-align:left;vertical-align:top}
+th{background:#faf5ff;color:var(--purple);position:sticky;top:0;cursor:pointer;white-space:nowrap}
+tr:hover td{background:#fffaf0}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700;background:#efe6fb;color:var(--purple)}
+.pill.ok{background:#dff5e8;color:var(--good)}.pill.wait{background:#fff1d6;color:var(--warn)}.pill.bad{background:#fde3ec;color:var(--bad)}
+
+dialog{border:0;border-radius:18px;padding:0;width:min(640px,94vw);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(29,22,48,.5)}
+dialog form{padding:18px 20px;max-height:86vh;overflow:auto}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fgrid label{display:flex;flex-direction:column;font-size:.82rem;color:var(--muted);gap:4px}
+.fgrid .full{grid-column:1/-1}
+.fgrid input,.fgrid select,.fgrid textarea{padding:8px 10px;border:1px solid #d9cbe8;border-radius:8px;font:inherit;color:var(--ink)}
+.dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;padding:10px 16px;border-radius:12px;opacity:0;transition:.3s;pointer-events:none;z-index:99}
+#toast.show{opacity:1}
+#status{position:fixed;right:14px;bottom:14px;font-size:.8rem;background:#fff;padding:6px 10px;border-radius:999px;box-shadow:var(--shadow);color:var(--muted)}
+#status.saving{color:var(--warn)}#status.err{color:var(--bad)}#status.saved{color:var(--good)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <canvas id="sparkles"></canvas>
+  <h1>🪔 Retreat Diwali Planning</h1>
+  <p>Community Diwali · Friday, November 13, 2026 · 6:00–11:30 PM</p>
+  <div class="sub">Retreat at Friendship · Neighbors · Friends · Community</div>
+  <div class="diyas" aria-hidden="true"><span class="diya"></span><span class="diya"></span><span class="diya"></span><span class="diya"></span><span class="diya"></span></div>
+</header>
+
+<nav class="tabs" id="tabnav" role="tablist" aria-label="Sections"></nav>
+
+<main>
+  <section class="panel active" id="panel-dashboard"></section>
+  <section class="panel" id="panel-registrations"></section>
+  <section class="panel" id="panel-waitlist"></section>
+  <section class="panel" id="panel-logistics"></section>
+  <section class="panel" id="panel-food"></section>
+  <section class="panel" id="panel-purchases"></section>
+  <section class="panel" id="panel-sponsors"></section>
+  <section class="panel" id="panel-finance"></section>
+  <section class="panel" id="panel-activities"></section>
+  <section class="panel" id="panel-games"></section>
+  <section class="panel" id="panel-dance"></section>
+  <section class="panel" id="panel-history"></section>
+  <section class="panel" id="panel-settings"></section>
+</main>
+
+<dialog id="dlg"><form id="dlgForm" method="dialog"></form></dialog>
+<div id="toast"></div>
+<div id="status">Ready</div>
+
+<script>
+/* ============ STORAGE LAYER ============
+   Primary store = a single JSON document. Writes go through save(), which
+   validates, records an audit event, and reports status. The backend is
+   pluggable: today it persists in this browser; swap `Backend` for a
+   shared service (e.g. Firebase, once verified) without touching the UI. */
+const FIREBASE_CONFIG = {
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_PROJECT.firebaseapp.com',
+  projectId: 'YOUR_PROJECT',
+  storageBucket: 'YOUR_PROJECT.appspot.com',
+  messagingSenderId: 'YOUR_SENDER_ID',
+  appId: 'YOUR_APP_ID'
+};
+const Backend = {
+  key: 'retreat-diwali-v1',   // local cache / local-only mode
+  mode: 'local',              // 'local' until Firebase connects, then 'cloud'
+  version: 0,                 // last shared version this page loaded or saved
+  sdk: null, db: null,
+  load(){ try{ return JSON.parse(localStorage.getItem(this.key)) }catch(e){ return null } },
+  store(doc){ localStorage.setItem(this.key, JSON.stringify(doc)) }
+};
+
+const uid = (p)=> p + Math.random().toString(36).slice(2,8);
+const todayISO = ()=> new Date().toISOString().slice(0,10);
+const nowStamp = ()=> new Date().toLocaleString();
+const money = (n)=> '$' + (Number(n)||0).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});
+const esc = (s)=> String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = (v)=> { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+
+function defaultDoc(){
+  return {
+    event:{ name:'Community Diwali Celebration', date:'2026-11-13', start:'18:00', end:'23:30',
+            venue:'Community venue (rectangular tables, 200 capacity)', capacity:200,
+            adultPrice:25, kidPrice:15, budget:3400, currency:'USD',
+            overdueAfterDays:0 },
+    registrations:[], waitlist:[], logistics:[], menu:[], purchases:[],
+    sponsors:[], income:[], expenses:[], activities:[], games:[], performances:[],
+    history:[]
+  };
+}
+
+let DB = Backend.load() || defaultDoc();
+
+function setStatus(text, cls){
+  const el = document.getElementById('status');
+  el.textContent = text; el.className = cls || '';
+}
+/* ============ SAVE PIPELINE + FIREBASE (Cloud Firestore) ============
+   Shared data:  events/{EVENT_ID}           -> { version, payload, updatedAt }
+   Audit trail:  events/{EVENT_ID}/history/* -> one append-only doc per change
+   A save is a transaction that only succeeds if the stored version still
+   equals the version this page last saw. Otherwise the save is refused and the
+   latest shared data is loaded, so nobody's change is silently overwritten. */
+const EVENT_ID = 'diwali-2026';
+const FIREBASE_VERSION = '10.12.2';
+let changes = 0, savedChanges = 0, pendingAudit = [], saveTimer = null, saveChain = Promise.resolve();
+
+function connStatus(){
+  return Backend.mode === 'cloud'
+    ? '<span class="pill ok">Connected to Firebase — shared</span>'
+    : '<span class="pill wait">Local only — not shared</span>';
+}
+function currentTab(){ return document.querySelector('nav.tabs button[aria-selected=true]')?.dataset.tab; }
+function businessData(){ const { history, ...rest } = DB; return rest; }
+
+function persist(){
+  changes++;
+  setStatus('Saving…','saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{ saveTimer = null; enqueueSave(); }, 250);
+}
+function enqueueSave(){
+  saveChain = saveChain.then(runSave).catch(()=>{});   // saves run one at a time
+  return saveChain;
+}
+async function runSave(){
+  const c0 = changes;
+  try{
+    if (Backend.mode === 'local'){
+      Backend.store(DB); pendingAudit = []; savedChanges = c0;
+      setStatus('Saved in this browser ✓','saved'); return;
+    }
+    await cloudSave();
+    savedChanges = c0;
+    setStatus('Saved to Firebase ✓','saved');
+  }catch(err){
+    if (err.message === 'CONFLICT'){
+      pendingAudit = [];
+      await loadFromCloud();
+      savedChanges = changes;
+      renderAll();
+      setStatus('Conflict — reloaded latest data','err');
+      toast('Someone saved at the same moment. Your last change was NOT saved — please re-enter it.');
+      return;
+    }
+    console.error(err);
+    setStatus('Save failed — check your connection','err');
+  }
+}
+async function cloudSave(){
+  const S = Backend.sdk, db = Backend.db;
+  const ref = S.doc(db, 'events', EVENT_ID);
+  const events = pendingAudit.slice();
+  const payload = JSON.stringify(businessData());
+  if (payload.length > 900000) throw new Error('Event data is too large for one shared record');
+  const next = await S.runTransaction(db, async tx => {
+    const snap = await tx.get(ref);
+    const remote = snap.exists() ? snap.data().version : 0;
+    if (remote !== Backend.version) throw new Error('CONFLICT');
+    const v = remote + 1;
+    tx.set(ref, { version: v, payload, updatedAt: S.serverTimestamp() });
+    for (const ev of events){
+      tx.set(S.doc(S.collection(db, 'events', EVENT_ID, 'history')), { ...ev, version: v });
+    }
+    return v;
+  });
+  Backend.version = next;
+  pendingAudit = pendingAudit.slice(events.length);
+}
+async function loadFromCloud(){
+  const S = Backend.sdk;
+  const snap = await S.getDoc(S.doc(Backend.db, 'events', EVENT_ID));
+  if (snap.exists()){
+    const d = snap.data();
+    Backend.version = d.version;
+    DB = { ...defaultDoc(), ...JSON.parse(d.payload), history: DB.history || [] };
+  } else {
+    Backend.version = 0;      // first connection: this browser's data becomes the shared copy
+    persist();
+  }
+}
+function listen(){
+  const S = Backend.sdk, db = Backend.db;
+  S.onSnapshot(S.doc(db, 'events', EVENT_ID), snap => {
+    if (!snap.exists()) return;
+    const d = snap.data();
+    // Ignore our own writes, and hold off while this page has unsaved edits (the save will detect any conflict).
+    if (d.version <= Backend.version || changes !== savedChanges) return;
+    DB = { ...defaultDoc(), ...JSON.parse(d.payload), history: DB.history || [] };
+    Backend.version = d.version;
+    renderAll();
+    toast('Updated by another committee member');
+  }, ()=> setStatus('Live sync interrupted — reload to resync','err'));
+  S.onSnapshot(S.query(S.collection(db, 'events', EVENT_ID, 'history'), S.orderBy('ts','desc'), S.limit(300)), snap => {
+    DB.history = snap.docs.map(x => ({ id: x.id, ...x.data() }));
+    if (currentTab() === 'history') renderHistory();
+  }, ()=>{});
+}
+async function connectFirebase(){
+  if (FIREBASE_CONFIG.apiKey.startsWith('YOUR_')){
+    setStatus('Local mode — not shared yet','err');
+    return;
+  }
+  try{
+    const base = `https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/`;
+    const [appMod, fsMod, authMod] = await Promise.all([
+      import(base + 'firebase-app.js'),
+      import(base + 'firebase-firestore.js'),
+      import(base + 'firebase-auth.js')
+    ]);
+    const app = appMod.initializeApp(FIREBASE_CONFIG);
+    const db = fsMod.getFirestore(app);
+    const auth = authMod.getAuth(app);
+    await authMod.signInAnonymously(auth);   // anonymous session only; not a login for committee members
+    Backend.sdk = fsMod; Backend.db = db; Backend.mode = 'cloud';
+    await loadFromCloud();
+    listen();
+    setStatus('Connected to Firebase ✓','saved');
+  }catch(err){
+    console.error(err);
+    Backend.mode = 'local';
+    setStatus('Offline — saved in this browser','err');
+    toast('Could not reach Firebase. Working in local mode.');
+  }
+}
+
+/* Audit trail: every change becomes an event. Editor label is honest. */
+function audit(recordType, recordId, action, field, before, after, summary){
+  const ev = { id: uid('h'), at: nowStamp(), ts: new Date().toISOString(), recordType, recordId, action,
+    field: field||'', before: before ?? '', after: after ?? '',
+    editor: 'Committee (shared)', summary: summary||'' };
+  DB.history.unshift(ev); pendingAudit.push(ev);
+  if (DB.history.length > 5000) DB.history.length = 5000;
+}
+
+/* Create / update / delete helpers used by all tabs */
+function addRecord(collection, rec, recordType, summary){
+  rec.id = rec.id || uid(recordType.slice(0,2));
+  rec.createdAt = rec.createdAt || nowStamp();
+  rec.updatedAt = nowStamp();
+  DB[collection].push(rec);
+  audit(recordType, rec.id, 'create', '', '', rec.name || rec.item || rec.family || rec.sponsor || rec.title || rec.id, summary || 'Record created');
+  persist(); return rec;
+}
+function updateRecord(collection, id, patch, recordType, summary){
+  const rec = DB[collection].find(r=>r.id===id); if(!rec) return null;
+  for (const [k,v] of Object.entries(patch)){
+    if (String(rec[k] ?? '') !== String(v ?? '')) audit(recordType, id, 'update', k, rec[k], v, summary);
+    rec[k] = v;
+  }
+  rec.updatedAt = nowStamp(); persist(); return rec;
+}
+function deleteRecord(collection, id, recordType){
+  const i = DB[collection].findIndex(r=>r.id===id); if(i<0) return;
+  const rec = DB[collection][i];
+  DB[collection].splice(i,1);
+  audit(recordType, id, 'delete', '', rec.name||rec.item||rec.family||id, '', 'Record deleted');
+  persist();
+}
+
+/* Derived numbers — computed from saved records, never cached */
+function regTotals(){
+  const regs = DB.registrations;
+  const adults = regs.reduce((s,r)=>s+num(r.adults),0);
+  const kids = regs.reduce((s,r)=>s+num(r.kids),0);
+  const under5 = regs.reduce((s,r)=>s+num(r.under5),0);
+  const attendees = adults + kids + under5;
+  const dietary = regs.filter(r=>r.diet && r.diet.trim() && !/^(none|na|no concerns)$/i.test(r.diet.trim())).length;
+  const paid = regs.reduce((s,r)=>s+num(r.paid),0);
+  return { families:regs.length, adults, kids, under5, attendees, dietary, paid,
+           seatsLeft: Math.max(0, DB.event.capacity - attendees) };
+}
+function waitTotals(){
+  const w = DB.waitlist.filter(x=>!['Declined','Promoted to Registered'].includes(x.status));
+  return { families:w.length, seats: w.reduce((s,x)=>s+num(x.adults)+num(x.kids)+num(x.under5),0) };
+}
+
+/* Tiny helpers for building tables and forms */
+function openDialog(title, fields, values, onSubmit){
+  const f = document.getElementById('dlgForm');
+  f.innerHTML = `<h2>${esc(title)}</h2><div class="fgrid">` +
+    fields.map(fd=>{
+      const v = values?.[fd.key] ?? fd.default ?? '';
+      const full = fd.full ? ' full' : '';
+      if (fd.type==='select') return `<label class="${full}">${esc(fd.label)}<select name="${fd.key}">${fd.options.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('')}</select></label>`;
+      if (fd.type==='textarea') return `<label class="${full}">${esc(fd.label)}<textarea name="${fd.key}" rows="3">${esc(v)}</textarea></label>`;
+      return `<label class="${full}">${esc(fd.label)}<input name="${fd.key}" type="${fd.type||'text'}" value="${esc(v)}" ${fd.step?`step="${fd.step}"`:''} ${fd.required?'required':''}></label>`;
+    }).join('') +
+    `</div><div class="dlg-actions"><button class="btn ghost" value="cancel" type="submit" formnovalidate>Cancel</button><button class="btn" id="dlgOk" type="button">Save</button></div>`;
+  const dlg = document.getElementById('dlg');
+  document.getElementById('dlgOk').onclick = ()=>{
+    const data = {};
+    for (const fd of fields){
+      const el = f.elements[fd.key];
+      data[fd.key] = fd.type==='number' ? num(el.value) : el.value.trim();
+    }
+    const missing = fields.filter(fd=>fd.required && !String(data[fd.key]||'').trim());
+    if (missing.length){ toast('Please fill: ' + missing.map(m=>m.label).join(', ')); return; }
+    onSubmit(data); dlg.close(); };
+  dlg.showModal();
+}
+function confirmDialog(message, onYes){
+  const f = document.getElementById('dlgForm');
+  f.innerHTML = `<h2>Please confirm</h2><p>${esc(message)}</p><div class="dlg-actions"><button class="btn ghost" type="submit" value="cancel">Cancel</button><button class="btn danger" id="dlgYes" type="button">Yes, continue</button></div>`;
+  const dlg = document.getElementById('dlg');
+  document.getElementById('dlgYes').onclick = ()=>{ dlg.close(); onYes(); };
+  dlg.showModal();
+}
+function toast(msg){
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+function toCSV(rows){
+  if(!rows.length) return '';
+  const keys = Object.keys(rows[0]);
+  const q = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+  return [keys.join(','), ...rows.map(r=>keys.map(k=>q(r[k])).join(','))].join('\n');
+}
+function download(name, text, type){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text],{type: type||'text/csv'}));
+  a.download = name; a.click();
+}
+/* Sortable/filterable table: rows = array of objects, cols = [{key,label,render?}] */
+function renderTable(rows, cols, opts={}){
+  if(!rows.length) return `<div class="empty">${esc(opts.empty||'Nothing here yet — add the first one.')}</div>`;
+  return `<div class="table-wrap"><table><thead><tr>${cols.map(c=>`<th data-sort="${c.key}">${esc(c.label)}</th>`).join('')}${opts.actions?'<th></th>':''}</tr></thead><tbody>` +
+    rows.map(r=>`<tr>${cols.map(c=>`<td>${c.render?c.render(r):esc(r[c.key])}</td>`).join('')}${opts.actions?`<td>${opts.actions(r)}</td>`:''}</tr>`).join('') +
+    `</tbody></table></div>`;
+}
+/* Generic list view with search + sort + filter, wired to a render callback */
+function listView(panelId, title, opts){
+  const panel = document.getElementById(panelId);
+  const state = { q:'', sort:opts.sortKey||'', dir:1, filters:{} };
+  const draw = ()=>{
+    let rows = coll(opts.collection).slice();
+    if (state.q){
+      const q = state.q.toLowerCase();
+      rows = rows.filter(r => opts.searchKeys.some(k=>String(r[k]??'').toLowerCase().includes(q)));
+    }
+    for (const [k,v] of Object.entries(state.filters)) if (v) rows = rows.filter(r=>String(r[k]??'')===v);
+    if (state.sort) rows.sort((a,b)=>{
+      const x=a[state.sort], y=b[state.sort];
+      return (typeof x==='number'&&typeof y==='number'? x-y : String(x??'').localeCompare(String(y??''))) * state.dir; });
+    panel.querySelector('.list-body').innerHTML = opts.table(rows);
+    if (opts.afterDraw) opts.afterDraw(panel, rows);
+  };
+  panel.innerHTML = `
+    <div class="toolbar">
+      <h2 style="margin:0 12px 0 0">${title}</h2>
+      <input class="grow" type="search" placeholder="Search…" aria-label="Search">
+      ${(opts.filters||[]).map(f=>`<select data-filter="${f.key}" aria-label="${esc(f.label)}"><option value="">All ${esc(f.label)}</option>${f.options.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`).join('')}
+      <button class="btn" data-add>+ Add</button>
+      <button class="btn ghost" data-import>⬆ Import</button>${opts.exportable!==false?'<button class="btn ghost" data-xlsx>⬇ Excel</button><button class="btn ghost" data-export>CSV</button>':''}
+    </div>
+    ${opts.header?opts.header():''}
+    <div class="list-body"></div>`;
+  panel.querySelector('input[type=search]').oninput = e=>{ state.q=e.target.value; draw(); };
+  panel.querySelectorAll('select[data-filter]').forEach(s=> s.onchange = e=>{ state.filters[s.dataset.filter]=e.target.value; draw(); });
+  panel.querySelector('[data-add]').onclick = ()=> opts.onAdd();
+  const tabIdOf = panelId.replace('panel-','');
+  panel.querySelector('[data-import]').onclick = ()=> openImporter(tabIdOf);
+  const xl = panel.querySelector('[data-xlsx]'); if (xl) xl.onclick = ()=> exportWorkbook([tabIdOf], `${opts.collection}-${todayISO()}.xlsx`);
+  const ex = panel.querySelector('[data-export]');
+  if (ex) ex.onclick = ()=> download(`${opts.collection}-${todayISO()}.csv`, toCSV(coll(opts.collection)));
+  // Wire delegated listeners ONCE per panel; always read the latest context,
+  // so re-rendering never stacks duplicate handlers.
+  panel._ctx = { state, draw, opts };
+  if (!panel._wired){
+    panel._wired = true;
+    panel.addEventListener('click', e=>{
+      const { state, draw, opts } = panel._ctx;
+      const th = e.target.closest('th[data-sort]');
+      if (th){ const k = th.dataset.sort; state.dir = state.sort===k ? -state.dir : 1; state.sort = k; draw(); return; }
+      const b = e.target.closest('[data-edit]'); if (b){ opts.onEdit(b.dataset.edit); return; }
+      const d = e.target.closest('[data-del]'); if (d) opts.onDelete(d.dataset.del);
+    });
+  }
+  draw();
+}
+
+/* ============ REGISTRATIONS ============ */
+function importRegistrationsFromRows(rows){
+  // Map the Google-Form export columns to the data model.
+  const header = rows[0].map(h=>String(h||'').trim());
+  const col = (re)=> header.findIndex(h=>re.test(h));
+  const cName=col(/full name/i), cPhone=col(/phone/i), cEmail=col(/email/i), cAddr=col(/address/i),
+        cAdult=col(/number of adults/i), cKids=col(/5 to 12|between ages/i), cU5=col(/under 5/i),
+        cPaid=col(/total amount paid/i), cZelle=col(/name on the zelle/i), cDiet=col(/dietary/i),
+        cTs=col(/timestamp/i);
+  const preview = { ok:[], skipped:[], dupes:[] };
+  const existing = new Set(DB.registrations.map(r=>(r.email||'').toLowerCase()));
+  for (const raw of rows.slice(1)){
+    const name = String(raw[cName]||'').trim();
+    if (!name || /^\d+$/.test(String(raw[cTs]||'')) || raw[cTs]===undefined && !name){ preview.skipped.push('blank/total row'); continue; }
+    const rec = {
+      family: name, contact: name, phone: String(raw[cPhone]||'').trim(), email: String(raw[cEmail]||'').trim(),
+      address: String(raw[cAddr]||'').trim(),
+      adults: num(raw[cAdult]), kids: num(raw[cKids]), under5: num(raw[cU5]),
+      paid: num(raw[cPaid]), zelleName: String(raw[cZelle]||'').trim(),
+      diet: String(raw[cDiet]||'').replace(/\s+/g,' ').trim(),
+      status:'Registered', registeredOn: raw[cTs] instanceof Date ? raw[cTs].toISOString().slice(0,10) : '',
+      notes:''
+    };
+    if (!rec.adults && !rec.kids && !rec.under5){ preview.skipped.push(name+' (no attendees)'); continue; }
+    if (rec.email && existing.has(rec.email.toLowerCase())) { preview.dupes.push(name); continue; }
+    preview.ok.push(rec);
+  }
+  return preview;
+}
+function openImportPreview(preview){
+  const seats = preview.ok.reduce((s,r)=>s+r.adults+r.kids+r.under5,0);
+  const over = regTotals().attendees + seats - DB.event.capacity;
+  confirmDialog(
+    `Import ${preview.ok.length} families (${seats} attendees).\n` +
+    `Skipped ${preview.skipped.length} row(s). Possible duplicates not imported: ${preview.dupes.length}.` +
+    (over>0 ? `\nWARNING: this exceeds capacity by ${over}.` : ''),
+    ()=>{
+      preview.ok.forEach(r=> addRecord('registrations', r, 'registration', 'Imported from spreadsheet'));
+      toast(`Imported ${preview.ok.length} families`);
+      renderRegistrations(); renderDashboard();
+    });
+}
+function regFields(){
+  return [
+    {key:'family',label:'Family name',required:true},
+    {key:'contact',label:'Primary contact'},
+    {key:'phone',label:'Phone'},
+    {key:'email',label:'Email',type:'email'},
+    {key:'adults',label:'Adults ($25)',type:'number',step:1},
+    {key:'kids',label:'Kids 5–12 ($15)',type:'number',step:1},
+    {key:'under5',label:'Under 5 (free)',type:'number',step:1},
+    {key:'paid',label:'Amount paid ($)',type:'number',step:'0.01'},
+    {key:'zelleName',label:'Name on Zelle'},
+    {key:'status',label:'Status',type:'select',options:['Registered','Paid','Pending payment','Cancelled']},
+    {key:'registeredOn',label:'Registered on',type:'date'},
+    {key:'diet',label:'Dietary / allergies',type:'textarea',full:true},
+    {key:'address',label:'Address',full:true},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderRegistrations(){
+  const t = regTotals();
+  listView('panel-registrations','👨‍👩‍👧 Registrations',{
+    collection:'registrations', searchKeys:['family','contact','email','phone','address'], sortKey:'family',
+    filters:[{key:'status',label:'statuses',options:['Registered','Paid','Pending payment','Cancelled']}],
+    header: ()=>`
+      <div class="cards" style="margin-bottom:12px">
+        <div class="card"><div class="label">Families</div><div class="value">${t.families}</div></div>
+        <div class="card"><div class="label">Adults</div><div class="value">${t.adults}</div></div>
+        <div class="card"><div class="label">Kids 5–12</div><div class="value">${t.kids}</div></div>
+        <div class="card"><div class="label">Under 5</div><div class="value">${t.under5}</div></div>
+        <div class="card ${t.attendees>DB.event.capacity?'bad':''}"><div class="label">Attendees</div><div class="value">${t.attendees}</div><div class="hint">of ${DB.event.capacity} capacity · ${t.seatsLeft} left</div></div>
+        <div class="card"><div class="label">Dietary notes</div><div class="value">${t.dietary}</div><div class="hint">families with requirements</div></div>
+      </div>
+      `,
+    table: rows => renderTable(rows,[
+      {key:'family',label:'Family'},
+      {key:'contact',label:'Contact'},
+      {key:'adults',label:'Adults'},
+      {key:'kids',label:'Kids 5–12'},
+      {key:'under5',label:'<5'},
+      {key:'attendees',label:'Total',render:r=>num(r.adults)+num(r.kids)+num(r.under5)},
+      {key:'paid',label:'Paid',render:r=>money(r.paid)},
+      {key:'status',label:'Status',render:r=>`<span class="pill ${r.status==='Registered'||r.status==='Paid'?'ok':'wait'}">${esc(r.status)}</span>`},
+      {key:'diet',label:'Dietary',render:r=>r.diet?esc(r.diet):'<span style="color:var(--muted)">—</span>'}
+    ],{actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`,
+       empty:'No registrations yet. Import the Excel file from Settings or use + Add.'}),
+    onAdd: ()=> openDialog('New registration', regFields(), {status:'Registered'}, d=>{
+      if (DB.registrations.some(r=>r.email && d.email && r.email.toLowerCase()===d.email.toLowerCase())) toast('Warning: this email is already registered');
+      addRecord('registrations', {...d, registeredOn: todayISO()}, 'registration', 'Added manually'); renderRegistrations(); renderDashboard(); }),
+    onEdit: id=>{ const r=DB.registrations.find(x=>x.id===id);
+      openDialog('Edit registration', regFields(), r, d=>{ updateRecord('registrations', id, d, 'registration', 'Edited'); renderRegistrations(); renderDashboard(); }); },
+    onDelete: id=>{ const r=DB.registrations.find(x=>x.id===id);
+      confirmDialog(`Delete the registration for "${r.family}"? This removes one record and is logged in Version History.`, ()=>{ deleteRecord('registrations', id, 'registration'); renderRegistrations(); renderDashboard(); }); },
+    afterDraw: (panel)=>{
+      const inp = panel.querySelector('#importFile');
+      if (inp) inp.onchange = async e=>{
+        const f = e.target.files[0]; if(!f) return;
+        const wb = XLSX.read(await f.arrayBuffer(), {type:'array', cellDates:true});
+        const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, defval:null});
+        openImportPreview(importRegistrationsFromRows(rows));
+        inp.value='';
+      };
+    }
+  });
+  document.getElementById('panel-registrations').redraw?.();
+}
+
+/* ============ DASHBOARD ============ */
+function renderDashboard(){
+  const t = regTotals(), w = waitTotals();
+  const panel = document.getElementById('panel-dashboard');
+  const fin = financeTotals();
+  const logDone = DB.logistics.filter(x=>x.status==='Completed').length;
+  const logPend = DB.logistics.length - logDone;
+  const today = todayISO();
+  const overdue = DB.logistics.filter(x=>x.status!=='Completed' && x.due && x.due < today).length
+                + DB.purchases.filter(x=>!['Purchased','Returned','Cancelled'].includes(x.status) && x.deadline && x.deadline < today).length;
+  const soon = DB.logistics.filter(x=>x.status!=='Completed' && x.due && x.due>=today && daysBetween(today,x.due)<=7).length;
+  const pctSeats = Math.min(100, Math.round(t.attendees/DB.event.capacity*100));
+  panel.innerHTML = `
+    <h2>Event status</h2>
+    <div class="cards">
+      <div class="card"><div class="label">Families registered</div><div class="value">${t.families}</div></div>
+      <div class="card"><div class="label">Attendees</div><div class="value">${t.attendees}</div><div class="hint">${t.adults} adults · ${t.kids} kids 5–12 · ${t.under5} under 5</div></div>
+      <div class="card warn"><div class="label">Waitlisted families</div><div class="value">${w.families}</div><div class="hint">${w.seats} seats requested</div></div>
+      <div class="card"><div class="label">Logistics done / open</div><div class="value">${logDone} / ${logPend}</div><div class="hint">${soon} due within 7 days</div></div>
+      <div class="card ${overdue?'bad':''}"><div class="label">Overdue items</div><div class="value">${overdue}</div><div class="hint">logistics &amp; purchases past deadline</div></div>
+      <div class="card"><div class="label">Food &amp; catering budget</div><div class="value">${money(fin.foodEstimated)}</div><div class="hint">estimated · ${money(fin.foodActual)} actual</div></div>
+      <div class="card"><div class="label">Purchase budget</div><div class="value">${money(fin.purchaseEstimated)}</div><div class="hint">${money(fin.purchaseActual)} actual</div></div>
+      <div class="card"><div class="label">Sponsor pledges</div><div class="value">${money(fin.pledged)}</div><div class="hint">${money(fin.received)} received · ${money(fin.pledged-fin.received)} outstanding</div></div>
+      <div class="card ${fin.remaining<0?'bad':''}"><div class="label">Remaining budget</div><div class="value">${money(fin.remaining)}</div><div class="hint">of ${money(DB.event.budget)} approved</div></div>
+      <div class="card ${fin.outstanding>0?'warn':''}"><div class="label">Outstanding payments</div><div class="value">${money(fin.outstanding)}</div><div class="hint">incurred but unpaid</div></div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>Capacity</h3>
+        <div class="barrow"><div class="meta"><span>${t.attendees} of ${DB.event.capacity} seats</span><span>${pctSeats}%</span></div><div class="bar"><i style="width:${pctSeats}%"></i></div></div>
+        <p style="color:var(--muted);font-size:.85rem">Waitlist demand: ${w.seats} seats across ${w.families} families. Promote from the Waitlist tab only when a committee member confirms.</p>
+      </div>
+      <div class="box"><h3>Budget vs actual by category</h3>${categoryBars()}</div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>Quick actions</h3>
+        <div class="toolbar">
+          <button class="btn small" data-go="registrations">+ Registration</button>
+          <button class="btn small" data-go="waitlist">+ Waitlist</button>
+          <button class="btn small" data-go="purchases">+ Purchase</button>
+          <button class="btn small" data-go="finance">+ Expense</button>
+          <button class="btn small" data-go="sponsors">+ Sponsor</button>
+        </div></div>
+      <div class="box"><h3>Latest committee updates</h3>${DB.history.slice(0,6).map(h=>`<div style="font-size:.85rem;padding:4px 0;border-bottom:1px dashed #eee">${esc(h.at)} · <b>${esc(h.recordType)}</b> ${esc(h.summary||h.action)}</div>`).join('') || '<div class="empty">No activity yet</div>'}</div>
+    </div>`;
+  panel.querySelectorAll('[data-go]').forEach(b=> b.onclick = ()=> showTab(b.dataset.go));
+}
+
+/* ============ WAITLIST ============ */
+const WAIT_STATUS = ['Waiting','Contacted','Offered a Spot','Confirmed','Declined','Promoted to Registered'];
+function waitFields(){
+  return [
+    {key:'family',label:'Family name',required:true},
+    {key:'contact',label:'Contact name'},
+    {key:'phone',label:'Phone'},
+    {key:'email',label:'Email',type:'email'},
+    {key:'adults',label:'Adults',type:'number',step:1},
+    {key:'kids',label:'Kids 5–12',type:'number',step:1},
+    {key:'under5',label:'Under 5',type:'number',step:1},
+    {key:'requestedOn',label:'Request date',type:'date',default:todayISO()},
+    {key:'priority',label:'Priority',type:'select',options:['High','Medium','Low']},
+    {key:'status',label:'Status',type:'select',options:WAIT_STATUS},
+    {key:'diet',label:'Dietary needs',type:'textarea',full:true},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function promoteWaitlist(id){
+  const w = DB.waitlist.find(x=>x.id===id); if(!w) return;
+  const dup = DB.registrations.find(r=> (w.email && r.email && r.email.toLowerCase()===w.email.toLowerCase()) || r.family.toLowerCase()===w.family.toLowerCase());
+  if (dup){ toast(`Not promoted: "${dup.family}" is already registered`); return; }
+  confirmDialog(`Promote "${w.family}" (${num(w.adults)+num(w.kids)+num(w.under5)} attendees) to the registration list? This is only for a committee member who has confirmed the spot.`, ()=>{
+    addRecord('registrations', {family:w.family, contact:w.contact, phone:w.phone, email:w.email, adults:w.adults, kids:w.kids, under5:w.under5, paid:0, status:'Pending payment', diet:w.diet, notes:'Promoted from waitlist '+w.id, registeredOn:todayISO()}, 'registration', 'Promoted from waitlist');
+    updateRecord('waitlist', id, {status:'Promoted to Registered'}, 'waitlist', 'Promoted to registration');
+    renderWaitlist(); renderRegistrations(); renderDashboard(); toast('Promoted to registrations');
+  });
+}
+function renderWaitlist(){
+  const t = waitTotals();
+  listView('panel-waitlist','⏳ Waitlist',{
+    collection:'waitlist', searchKeys:['family','contact','email','phone','notes'], sortKey:'requestedOn',
+    filters:[{key:'status',label:'statuses',options:WAIT_STATUS},{key:'priority',label:'priorities',options:['High','Medium','Low']}],
+    header: ()=>`<div class="cards" style="margin-bottom:12px">
+      <div class="card warn"><div class="label">Families waiting</div><div class="value">${t.families}</div></div>
+      <div class="card"><div class="label">Seats requested</div><div class="value">${t.seats}</div><div class="hint">excludes declined/promoted</div></div></div>`,
+    table: rows => renderTable(rows,[
+      {key:'family',label:'Family'},{key:'contact',label:'Contact'},
+      {key:'adults',label:'Adults'},{key:'kids',label:'Kids 5–12'},{key:'under5',label:'<5'},
+      {key:'requestedOn',label:'Requested'},
+      {key:'priority',label:'Priority',render:r=>`<span class="pill ${r.priority==='High'?'bad':r.priority==='Medium'?'wait':''}">${esc(r.priority||'')}</span>`},
+      {key:'status',label:'Status',render:r=>`<span class="pill ${r.status==='Confirmed'?'ok':''}">${esc(r.status)}</span>`}
+    ],{empty:'No waitlist requests.',actions:r=>`${r.status!=='Promoted to Registered'?`<button class="btn small" data-promote="${r.id}">Promote</button> `:''}<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`}),
+    onAdd: ()=> openDialog('New waitlist request', waitFields(), {status:'Waiting',priority:'Medium'}, d=>{ addRecord('waitlist', d, 'waitlist', 'Request added'); renderWaitlist(); renderDashboard(); }),
+    onEdit: id=>{ openDialog('Edit waitlist request', waitFields(), DB.waitlist.find(x=>x.id===id), d=>{ updateRecord('waitlist', id, d, 'waitlist', 'Edited'); renderWaitlist(); renderDashboard(); }); },
+    onDelete: id=>{ const w=DB.waitlist.find(x=>x.id===id); confirmDialog(`Delete the waitlist request for "${w.family}"?`, ()=>{ deleteRecord('waitlist', id, 'waitlist'); renderWaitlist(); renderDashboard(); }); },
+    afterDraw: (panel)=> panel.querySelectorAll('[data-promote]').forEach(b=> b.onclick = ()=> promoteWaitlist(b.dataset.promote))
+  });
+}
+
+/* ============ LOGISTICS ============ */
+const LOG_STATUS=['Not Started','In Progress','Completed','Blocked'];
+const PRIORITY=['High','Medium','Low'];
+function logFields(){
+  return [
+    {key:'task',label:'Task',required:true,full:true},
+    {key:'category',label:'Category',type:'select',options:['Venue','Equipment','Volunteers','Setup','Cleanup','Other']},
+    {key:'owner',label:'Assigned to'},
+    {key:'priority',label:'Priority',type:'select',options:PRIORITY},
+    {key:'qtyRequired',label:'Qty required',type:'number',step:1},
+    {key:'qtyProcured',label:'Qty procured',type:'number',step:1},
+    {key:'vendor',label:'Vendor / supplier'},
+    {key:'estimated',label:'Estimated cost ($)',type:'number',step:'0.01'},
+    {key:'actual',label:'Actual cost ($)',type:'number',step:'0.01'},
+    {key:'due',label:'Target date',type:'date'},
+    {key:'status',label:'Status',type:'select',options:LOG_STATUS},
+    {key:'dependsOn',label:'Depends on'},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderLogistics(){
+  const today=todayISO();
+  const done=DB.logistics.filter(x=>x.status==='Completed').length;
+  const pct=DB.logistics.length?Math.round(done/DB.logistics.length*100):0;
+  listView('panel-logistics','🧰 Logistics',{
+    collection:'logistics', searchKeys:['task','owner','vendor','notes'], sortKey:'due',
+    filters:[{key:'status',label:'statuses',options:LOG_STATUS},{key:'priority',label:'priorities',options:PRIORITY},{key:'owner',label:'owners',options:[...new Set(DB.logistics.map(x=>x.owner).filter(Boolean))]},{key:'category',label:'categories',options:['Venue','Equipment','Volunteers','Setup','Cleanup','Other']}],
+    header: ()=>`<div class="box" style="margin-bottom:12px"><div class="barrow"><div class="meta"><span>${done} of ${DB.logistics.length} tasks completed</span><span>${pct}%</span></div><div class="bar"><i style="width:${pct}%"></i></div></div></div>`,
+    table: rows => renderTable(rows,[
+      {key:'task',label:'Task',render:r=>`${esc(r.task)}${r.dependsOn?`<div style="font-size:.78rem;color:var(--muted)">after: ${esc(r.dependsOn)}</div>`:''}`},
+      {key:'owner',label:'Owner'},{key:'category',label:'Category'},
+      {key:'priority',label:'Priority'},
+      {key:'progress',label:'Qty',render:r=>r.qtyRequired?`${num(r.qtyProcured)}/${num(r.qtyRequired)}`:'—'},
+      {key:'due',label:'Target',render:r=>`${esc(r.due||'—')}${r.status!=='Completed'&&r.due&&r.due<today?' <span class="pill bad">overdue</span>':''}`},
+      {key:'status',label:'Status',render:r=>`<span class="pill ${r.status==='Completed'?'ok':r.status==='Blocked'?'bad':r.status==='In Progress'?'wait':''}">${esc(r.status)}</span>`},
+      {key:'actual',label:'Cost',render:r=>`${money(r.actual||r.estimated)}${r.actual?'':' <span style="color:var(--muted)">est</span>'}`}
+    ],{empty:'No logistics tasks yet.',actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`}),
+    onAdd: ()=> openDialog('New logistics task', logFields(), {status:'Not Started',priority:'Medium',category:'Setup'}, d=>{ addRecord('logistics', d, 'logistics', 'Task added'); renderLogistics(); renderDashboard(); }),
+    onEdit: id=>{ openDialog('Edit logistics task', logFields(), DB.logistics.find(x=>x.id===id), d=>{ updateRecord('logistics', id, d, 'logistics', 'Edited'); renderLogistics(); renderDashboard(); }); },
+    onDelete: id=>{ const x=DB.logistics.find(y=>y.id===id); confirmDialog(`Delete the task "${x.task}"?`, ()=>{ deleteRecord('logistics', id, 'logistics'); renderLogistics(); renderDashboard(); }); }
+  });
+}
+
+/* ============ FOOD & CATERING ============ */
+const FOOD_STATUS=['Planned','Quoted','Ordered','Partially Delivered','Delivered','Cancelled'];
+function foodFields(){
+  return [
+    {key:'item',label:'Food item',required:true},
+    {key:'category',label:'Category',type:'select',options:['Starters','Mains','Breads','Sweets','Drinks','Desserts','Other']},
+    {key:'mealType',label:'Meal type',type:'select',options:['Veg','Non-veg','Vegan','Jain','Gluten-free','Mixed']},
+    {key:'vendor',label:'Vendor'},
+    {key:'vendorContact',label:'Vendor contact'},
+    {key:'qtyRequired',label:'Qty required',type:'number',step:1},
+    {key:'qtyOrdered',label:'Qty ordered',type:'number',step:1},
+    {key:'qtyReceived',label:'Qty received',type:'number',step:1},
+    {key:'unitCost',label:'Unit cost ($)',type:'number',step:'0.01'},
+    {key:'actualTotal',label:'Actual total ($)',type:'number',step:'0.01'},
+    {key:'advancePaid',label:'Advance paid ($)',type:'number',step:'0.01'},
+    {key:'status',label:'Order status',type:'select',options:FOOD_STATUS},
+    {key:'deliveryAt',label:'Delivery date/time',type:'datetime-local'},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function foodEstimate(f){ return num(f.qtyRequired)*num(f.unitCost); }
+function renderFood(){
+  const t = regTotals();
+  const est = DB.menu.reduce((s,f)=>s+foodEstimate(f),0);
+  const act = DB.menu.reduce((s,f)=>s+(num(f.actualTotal)||num(f.qtyReceived||f.qtyOrdered)*num(f.unitCost)),0);
+  const adv = DB.menu.reduce((s,f)=>s+num(f.advancePaid),0);
+  const byCat = {}; DB.menu.forEach(f=>{ byCat[f.category||'Other']=(byCat[f.category||'Other']||0)+foodEstimate(f); });
+  listView('panel-food','🍛 Food & Catering',{
+    collection:'menu', searchKeys:['item','vendor','notes','mealType'], sortKey:'category',
+    filters:[{key:'status',label:'statuses',options:FOOD_STATUS},{key:'mealType',label:'diets',options:['Veg','Non-veg','Vegan','Jain','Gluten-free','Mixed']}],
+    header: ()=>`<div class="cards" style="margin-bottom:12px">
+      <div class="card"><div class="label">Estimated food cost</div><div class="value">${money(est)}</div></div>
+      <div class="card"><div class="label">Actual / received cost</div><div class="value">${money(act)}</div><div class="hint">${money(est-act)} vs estimate</div></div>
+      <div class="card"><div class="label">Advances paid</div><div class="value">${money(adv)}</div><div class="hint">remaining ${money(Math.max(0,act-adv))}</div></div>
+      <div class="card"><div class="label">Plan size</div><div class="value">${t.attendees}</div><div class="hint">registered attendees · adjust quantities manually</div></div>
+      <div class="card"><div class="label">Dietary notes</div><div class="value">${t.dietary}</div><div class="hint">families — check Registrations</div></div></div>
+      <div class="box" style="margin-bottom:12px"><h3>Estimated cost by category</h3>${Object.entries(byCat).map(([k,v])=>`<div class="barrow"><div class="meta"><span>${esc(k)}</span><span>${money(v)}</span></div><div class="bar"><i style="width:${Math.round(v/Math.max(est,1)*100)}%"></i></div></div>`).join('')||'<div class="empty">Add menu items to see totals.</div>'}</div>`,
+    table: rows => renderTable(rows,[
+      {key:'item',label:'Item'},{key:'category',label:'Category'},{key:'mealType',label:'Diet'},
+      {key:'vendor',label:'Vendor'},
+      {key:'qtyRequired',label:'Req'},{key:'qtyOrdered',label:'Ordered'},{key:'qtyReceived',label:'Recv'},
+      {key:'unitCost',label:'Unit',render:r=>money(r.unitCost)},
+      {key:'est',label:'Est. total',render:r=>money(foodEstimate(r))},
+      {key:'actualTotal',label:'Actual',render:r=>money(r.actualTotal)},
+      {key:'advancePaid',label:'Advance',render:r=>money(r.advancePaid)},
+      {key:'status',label:'Status',render:r=>`<span class="pill ${r.status==='Delivered'?'ok':''}">${esc(r.status)}</span>`}
+    ],{empty:'No menu items yet.',actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`}),
+    onAdd: ()=> openDialog('New menu item', foodFields(), {status:'Planned',mealType:'Veg',category:'Mains'}, d=>{ addRecord('menu', d, 'catering', 'Menu item added'); renderFood(); renderDashboard(); }),
+    onEdit: id=>{ openDialog('Edit menu item', foodFields(), DB.menu.find(x=>x.id===id), d=>{ updateRecord('menu', id, d, 'catering', 'Edited'); renderFood(); renderDashboard(); }); },
+    onDelete: id=>{ const x=DB.menu.find(y=>y.id===id); confirmDialog(`Remove "${x.item}" from the menu?`, ()=>{ deleteRecord('menu', id, 'catering'); renderFood(); renderDashboard(); }); }
+  });
+}
+
+/* ============ PURCHASES & SUPPLIES ============ */
+const PUR_STATUS=['Planned','To Purchase','Assigned','Ordered','Partially Purchased','Purchased','Returned','Cancelled'];
+const PAY_STATUS=['Unpaid','Partially Paid','Paid'];
+function purFields(){
+  return [
+    {key:'item',label:'Item',required:true,full:true},
+    {key:'category',label:'Category',type:'select',options:['Tableware','Drinks & ice','Gifts & goodies','Game prizes','Decorations','Cleaning','Stationery & printing','Misc']},
+    {key:'qtyRequired',label:'Qty required',type:'number',step:1},
+    {key:'qtyPurchased',label:'Qty purchased',type:'number',step:1},
+    {key:'estUnit',label:'Est. unit cost ($)',type:'number',step:'0.01'},
+    {key:'actUnit',label:'Actual unit cost ($)',type:'number',step:'0.01'},
+    {key:'store',label:'Store / vendor'},
+    {key:'link',label:'Link / reference'},
+    {key:'buyer',label:'Assigned buyer'},
+    {key:'priority',label:'Priority',type:'select',options:PRIORITY},
+    {key:'deadline',label:'Purchase deadline',type:'date'},
+    {key:'status',label:'Purchase status',type:'select',options:PUR_STATUS},
+    {key:'payStatus',label:'Payment status',type:'select',options:PAY_STATUS},
+    {key:'receipt',label:'Receipt / invoice ref'},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderPurchases(){
+  const today=todayISO();
+  const open = DB.purchases.filter(p=>!['Purchased','Returned','Cancelled'].includes(p.status));
+  const outstanding = open.reduce((s,p)=>s+Math.max(0,num(p.qtyRequired)-num(p.qtyPurchased)),0);
+  listView('panel-purchases','🛒 Purchases & Supplies',{
+    collection:'purchases', searchKeys:['item','store','buyer','notes','category'], sortKey:'deadline',
+    filters:[{key:'status',label:'statuses',options:PUR_STATUS},{key:'payStatus',label:'payment',options:PAY_STATUS},{key:'buyer',label:'buyers',options:[...new Set(DB.purchases.map(p=>p.buyer).filter(Boolean))]}],
+    header: ()=>`<div class="cards" style="margin-bottom:12px">
+      <div class="card"><div class="label">Items still to buy</div><div class="value">${outstanding}</div><div class="hint">${open.length} open lines</div></div>
+      <div class="card"><div class="label">Estimated total</div><div class="value">${money(DB.purchases.reduce((s,p)=>s+num(p.qtyRequired)*num(p.estUnit),0))}</div></div>
+      <div class="card"><div class="label">Actual spend</div><div class="value">${money(DB.purchases.reduce((s,p)=>s+num(p.qtyPurchased)*num(p.actUnit),0))}</div></div>
+      <div class="card ${open.filter(p=>p.deadline&&p.deadline<today).length?'bad':''}"><div class="label">Past deadline</div><div class="value">${open.filter(p=>p.deadline&&p.deadline<today).length}</div></div></div>`,
+    table: rows => renderTable(rows,[
+      {key:'item',label:'Item',render:r=>`${esc(r.item)}<div style="font-size:.78rem;color:var(--muted)">${esc(r.category||'')}</div>`},
+      {key:'qty',label:'Bought / need',render:r=>`${num(r.qtyPurchased)} / ${num(r.qtyRequired)}`},
+      {key:'remaining',label:'Left',render:r=>Math.max(0,num(r.qtyRequired)-num(r.qtyPurchased))},
+      {key:'estTotal',label:'Est.',render:r=>money(num(r.qtyRequired)*num(r.estUnit))},
+      {key:'actTotal',label:'Actual',render:r=>money(num(r.qtyPurchased)*num(r.actUnit))},
+      {key:'buyer',label:'Buyer'},
+      {key:'deadline',label:'Deadline',render:r=>`${esc(r.deadline||'—')}${r.deadline&&r.deadline<today&&!['Purchased','Returned','Cancelled'].includes(r.status)?' <span class="pill bad">late</span>':''}`},
+      {key:'status',label:'Status',render:r=>`<span class="pill ${r.status==='Purchased'?'ok':''}">${esc(r.status)}</span>`},
+      {key:'payStatus',label:'Paid',render:r=>`<span class="pill ${r.payStatus==='Paid'?'ok':r.payStatus==='Partially Paid'?'wait':''}">${esc(r.payStatus||'Unpaid')}</span>`}
+    ],{empty:'No purchases yet. Add decorations, cups, drinks, prizes…',actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`}),
+    onAdd: ()=> openDialog('New purchase', purFields(), {status:'Planned',priority:'Medium',payStatus:'Unpaid',category:'Misc'}, d=>{ addRecord('purchases', d, 'purchase', 'Purchase added'); renderPurchases(); renderDashboard(); }),
+    onEdit: id=>{ openDialog('Edit purchase', purFields(), DB.purchases.find(x=>x.id===id), d=>{ updateRecord('purchases', id, d, 'purchase', 'Edited'); renderPurchases(); renderDashboard(); }); },
+    onDelete: id=>{ const x=DB.purchases.find(y=>y.id===id); confirmDialog(`Delete the purchase "${x.item}"?`, ()=>{ deleteRecord('purchases', id, 'purchase'); renderPurchases(); renderDashboard(); }); }
+  });
+}
+
+/* ============ SPONSORSHIPS ============ */
+const TIERS=['Gold','Silver','Bronze','In-kind'];
+const SPON_STATUS=['Prospect','Pledged','Partially Received','Received','Declined'];
+function sponFields(){
+  return [
+    {key:'sponsor',label:'Sponsor / business',required:true},
+    {key:'contact',label:'Contact person'},
+    {key:'details',label:'Contact details'},
+    {key:'tier',label:'Tier',type:'select',options:TIERS},
+    {key:'pledged',label:'Pledged ($)',type:'number',step:'0.01'},
+    {key:'received',label:'Received ($)',type:'number',step:'0.01'},
+    {key:'method',label:'Payment method'},
+    {key:'paidOn',label:'Payment date',type:'date'},
+    {key:'status',label:'Status',type:'select',options:SPON_STATUS},
+    {key:'benefits',label:'Benefits promised',type:'textarea',full:true},
+    {key:'logo',label:'Logo / promo material received?',type:'select',options:['No','Yes']},
+    {key:'recognition',label:'Recognition required',type:'textarea',full:true},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderSponsors(){
+  const pl=DB.sponsors.reduce((s,x)=>s+num(x.pledged),0), rc=DB.sponsors.reduce((s,x)=>s+num(x.received),0);
+  listView('panel-sponsors','🏅 Sponsorships',{
+    collection:'sponsors', searchKeys:['sponsor','contact','details','benefits'], sortKey:'tier',
+    filters:[{key:'tier',label:'tiers',options:TIERS},{key:'status',label:'statuses',options:SPON_STATUS}],
+    header: ()=>`<div class="cards" style="margin-bottom:12px">
+      <div class="card"><div class="label">Total pledged</div><div class="value">${money(pl)}</div></div>
+      <div class="card"><div class="label">Funds received</div><div class="value">${money(rc)}</div></div>
+      <div class="card ${pl-rc>0?'warn':''}"><div class="label">Outstanding pledges</div><div class="value">${money(pl-rc)}</div><div class="hint">not counted as cash</div></div></div>`,
+    table: rows => renderTable(rows,[
+      {key:'sponsor',label:'Sponsor'},{key:'tier',label:'Tier'},{key:'contact',label:'Contact'},
+      {key:'pledged',label:'Pledged',render:r=>money(r.pledged)},
+      {key:'received',label:'Received',render:r=>money(r.received)},
+      {key:'out',label:'Outstanding',render:r=>money(num(r.pledged)-num(r.received))},
+      {key:'benefits',label:'Benefits',render:r=>esc(r.benefits||'—')},
+      {key:'status',label:'Status',render:r=>`<span class="pill ${r.status==='Received'?'ok':''}">${esc(r.status)}</span>`}
+    ],{empty:'No sponsors yet.',actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`}),
+    onAdd: ()=> openDialog('New sponsor', sponFields(), {tier:'Bronze',status:'Prospect',logo:'No'}, d=>{ addRecord('sponsors', d, 'sponsorship', 'Sponsor added'); renderSponsors(); renderDashboard(); }),
+    onEdit: id=>{ openDialog('Edit sponsor', sponFields(), DB.sponsors.find(x=>x.id===id), d=>{ updateRecord('sponsors', id, d, 'sponsorship', 'Edited'); renderSponsors(); renderDashboard(); }); },
+    onDelete: id=>{ const x=DB.sponsors.find(y=>y.id===id); confirmDialog(`Delete sponsor "${x.sponsor}"?`, ()=>{ deleteRecord('sponsors', id, 'sponsorship'); renderSponsors(); renderDashboard(); }); }
+  });
+}
+
+/* ============ FINANCE & BUDGET ============
+   Definitions (from the project spec):
+   - Income received      = sponsor funds received + other income actually received
+   - Expenses incurred    = actual cost of food, purchases, logistics and other expenses
+   - Outstanding          = incurred − payments applied to those expenses
+   - Net cash             = income received − payments made
+   - Remaining budget     = approved budget − expenses incurred
+   Linked records (menu/purchase/logistics) are costed once, at source,
+   so a linked expense is never counted twice. */
+function financeTotals(){
+  const pledged = DB.sponsors.reduce((s,x)=>s+num(x.pledged),0);
+  const sponsorReceived = DB.sponsors.reduce((s,x)=>s+num(x.received),0);
+  const otherIncome = DB.income.reduce((s,x)=>s+num(x.amount),0);
+  const regReceived = DB.registrations.reduce((s,r)=>s+num(r.paid),0);
+  const received = sponsorReceived + otherIncome + regReceived;
+
+  const foodEstimated = DB.menu.reduce((s,f)=>s+num(f.qtyRequired)*num(f.unitCost),0);
+  const foodActual = DB.menu.reduce((s,f)=>s+(num(f.actualTotal)||num(f.qtyReceived||f.qtyOrdered)*num(f.unitCost)),0);
+  const foodAdvance = DB.menu.reduce((s,f)=>s+num(f.advancePaid),0);
+
+  const purchaseEstimated = DB.purchases.reduce((s,p)=>s+num(p.qtyRequired)*num(p.estUnit),0);
+  const purchaseActual = DB.purchases.reduce((s,p)=>s+num(p.qtyPurchased)*num(p.actUnit),0);
+  const purchasePaid = DB.purchases.filter(p=>p.payStatus==='Paid').reduce((s,p)=>s+num(p.qtyPurchased)*num(p.actUnit),0);
+  const committedOpen = DB.purchases.filter(p=>!['Purchased','Returned','Cancelled'].includes(p.status))
+    .reduce((s,p)=>s+Math.max(0,num(p.qtyRequired)-num(p.qtyPurchased))*num(p.estUnit),0);
+
+  // Standalone expenses (not linked to a purchase/order/task)
+  const free = DB.expenses.filter(e=>!e.linkedId);
+  const otherEstimated = free.reduce((s,e)=>s+num(e.estimated),0);
+  const otherActual = free.reduce((s,e)=>s+num(e.actual),0);
+  const otherPaid = free.reduce((s,e)=>s+num(e.paid),0);
+
+  const logisticsActual = DB.logistics.reduce((s,l)=>s+num(l.actual),0);
+
+  const incurred = foodActual + purchaseActual + otherActual + logisticsActual;
+  const paid = foodAdvance + purchasePaid + otherPaid;
+  const outstanding = Math.max(0, incurred - paid);
+  return {
+    pledged, received, sponsorReceived, otherIncome, regReceived,
+    foodEstimated, foodActual, purchaseEstimated, purchaseActual,
+    committedOpen, incurred, paid, outstanding,
+    estimatedTotal: foodEstimated + purchaseEstimated + otherEstimated,
+    remaining: DB.event.budget - incurred,
+    netCash: received - paid,
+    variance: DB.event.budget - incurred
+  };
+}
+function incomeFields(){
+  return [
+    {key:'source',label:'Source',required:true},
+    {key:'amount',label:'Amount ($)',type:'number',step:'0.01',required:true},
+    {key:'date',label:'Date',type:'date',default:todayISO()},
+    {key:'method',label:'Payment method'},
+    {key:'reference',label:'Transaction reference'},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function expFields(){
+  return [
+    {key:'description',label:'Description',required:true,full:true},
+    {key:'category',label:'Category',type:'select',options:['Food & Catering','Purchases & Supplies','Logistics','Venue and equipment','Decorations',"Children's gifts",'Games and prizes','Dance and entertainment','Printing and stationery','Cleaning','Miscellaneous']},
+    {key:'linkedId',label:'Linked record ID (optional)'},
+    {key:'vendor',label:'Vendor'},
+    {key:'date',label:'Transaction date',type:'date',default:todayISO()},
+    {key:'estimated',label:'Estimated ($)',type:'number',step:'0.01'},
+    {key:'actual',label:'Actual ($)',type:'number',step:'0.01'},
+    {key:'paid',label:'Amount paid ($)',type:'number',step:'0.01'},
+    {key:'receipt',label:'Receipt / invoice ref'},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderFinance(){
+  const f = financeTotals();
+  const cats={}; DB.expenses.forEach(e=>{ const c=e.category||'Miscellaneous'; cats[c]=cats[c]||{est:0,act:0}; cats[c].est+=num(e.estimated); cats[c].act+=num(e.actual); });
+  const over = Object.entries(cats).filter(([,v])=>v.act>v.est);
+  const panel = document.getElementById('panel-finance');
+  panel.innerHTML = `
+    <div class="toolbar"><h2 style="margin:0 12px 0 0">💰 Finance &amp; Budget</h2>
+      <button class="btn" id="addExp">+ Expense</button><button class="btn ghost" id="addInc">+ Income</button>
+      <button class="btn ghost" id="exportFin">⬇ Report CSV</button></div>
+    <div class="cards">
+      <div class="card"><div class="label">Approved budget</div><div class="value">${money(DB.event.budget)}</div></div>
+      <div class="card"><div class="label">Expenses incurred</div><div class="value">${money(f.incurred)}</div><div class="hint">estimated ${money(f.estimatedTotal)}</div></div>
+      <div class="card ${f.remaining<0?'bad':''}"><div class="label">Remaining budget</div><div class="value">${money(f.remaining)}</div><div class="hint">budget − incurred</div></div>
+      <div class="card ${f.outstanding>0?'warn':''}"><div class="label">Outstanding payments</div><div class="value">${money(f.outstanding)}</div><div class="hint">paid ${money(f.paid)}</div></div>
+      <div class="card"><div class="label">Income received</div><div class="value">${money(f.received)}</div><div class="hint">sponsors ${money(f.sponsorReceived)} · other ${money(f.otherIncome)}</div></div>
+      <div class="card"><div class="label">Pledges (not cash)</div><div class="value">${money(f.pledged)}</div><div class="hint">${money(f.pledged-f.sponsorReceived)} still to collect</div></div>
+      <div class="card ${f.netCash<0?'bad':''}"><div class="label">Net cash position</div><div class="value">${money(f.netCash)}</div><div class="hint">received − paid</div></div>
+      <div class="card"><div class="label">Committed, not incurred</div><div class="value">${money(f.committedOpen)}</div><div class="hint">open purchases (not double-counted)</div></div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>Budget vs actual by category</h3>${Object.keys(cats).length?Object.entries(cats).map(([k,v])=>{
+        const mx=Math.max(...Object.values(cats).map(x=>Math.max(x.est,x.act)),1);
+        return `<div class="barrow"><div class="meta"><span>${esc(k)}</span><span>${money(v.act)} / ${money(v.est)} ${v.act>v.est?'⚠️ overrun':''}</span></div><div class="bar"><i style="width:${Math.round(v.act/mx*100)}%;${v.act>v.est?'background:var(--bad)':''}"></i></div></div>`}).join(''):'<div class="empty">No expenses yet.</div>'}
+        ${over.length?`<p style="color:var(--bad);font-size:.85rem">Overrun in: ${over.map(o=>esc(o[0])).join(', ')}</p>`:''}</div>
+      <div class="box"><h3>Expenses</h3>${renderTable(DB.expenses,[
+        {key:'description',label:'Description'},{key:'category',label:'Category'},
+        {key:'actual',label:'Actual',render:r=>money(r.actual)},
+        {key:'paid',label:'Paid',render:r=>money(r.paid)},
+        {key:'out',label:'Owed',render:r=>money(Math.max(0,num(r.actual)-num(r.paid)))}
+      ],{actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`,empty:'No expenses yet.'})}</div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>Income</h3>${renderTable(DB.income,[
+        {key:'source',label:'Source'},{key:'amount',label:'Amount',render:r=>money(r.amount)},{key:'date',label:'Date'},{key:'method',label:'Method'}
+      ],{actions:r=>`<button class="btn small danger" data-incdel="${r.id}">✕</button>`,empty:'No other income yet. Sponsor funds are counted from Sponsorships.'})}</div>
+      <div class="box"><h3>Definitions</h3><p style="font-size:.85rem;color:var(--muted)">Outstanding = incurred − paid. Net cash = income received − paid. Remaining = approved budget − incurred. Pledges are shown separately and are not cash until received. Purchases, menu items and logistics are costed once at source.</p></div>
+    </div>`;
+  document.getElementById('addExp').onclick=()=> openDialog('New expense', expFields(), {category:'Miscellaneous'}, d=>{ addRecord('expenses', d, 'finance', 'Expense added'); renderFinance(); renderDashboard(); });
+  document.getElementById('addInc').onclick=()=> openDialog('New income', incomeFields(), {}, d=>{ addRecord('income', d, 'finance', 'Income added'); renderFinance(); renderDashboard(); });
+  document.getElementById('exportFin').onclick=()=> download(`finance-${todayISO()}.csv`, toCSV(DB.expenses.map(e=>({...e,owed:Math.max(0,num(e.actual)-num(e.paid))}))));
+  panel.querySelectorAll('[data-edit]').forEach(b=> b.onclick=()=>{ const id=b.dataset.edit; openDialog('Edit expense', expFields(), DB.expenses.find(x=>x.id===id), d=>{ updateRecord('expenses', id, d, 'finance', 'Edited'); renderFinance(); renderDashboard(); }); });
+  panel.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ const id=b.dataset.del; confirmDialog('Delete this expense? Only this one record is removed.', ()=>{ deleteRecord('expenses', id, 'finance'); renderFinance(); renderDashboard(); }); });
+  panel.querySelectorAll('[data-incdel]').forEach(b=> b.onclick=()=>{ const id=b.dataset.incdel; confirmDialog('Delete this income entry?', ()=>{ deleteRecord('income', id, 'finance'); renderFinance(); renderDashboard(); }); });
+}
+
+/* ============ ACTIVITIES, GAMES, DANCE & FUN ============ */
+function actFields(){
+  return [
+    {key:'name',label:'Activity',required:true,full:true},
+    {key:'start',label:'Start time',type:'time'},
+    {key:'end',label:'End time',type:'time'},
+    {key:'organizer',label:'Coordinator'},
+    {key:'materials',label:'Required materials',type:'textarea',full:true},
+    {key:'setup',label:'Setup requirements',type:'textarea',full:true},
+    {key:'estimated',label:'Estimated cost ($)',type:'number',step:'0.01'},
+    {key:'actual',label:'Actual cost ($)',type:'number',step:'0.01'},
+    {key:'status',label:'Status',type:'select',options:['Idea','Planned','Preparing','Ready','Done']},
+    {key:'dependsOn',label:'Depends on'},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderActivities(){
+  const sorted = DB.activities.slice().sort((a,b)=>String(a.start||'99').localeCompare(String(b.start||'99')));
+  const conflicts = sorted.filter((a,i)=> i>0 && a.start && sorted[i-1].end && a.start < sorted[i-1].end && a.organizer && a.organizer===sorted[i-1].organizer).map(a=>a.name);
+  const panel = document.getElementById('panel-activities');
+  panel.innerHTML = `<div class="toolbar"><h2 style="margin:0 12px 0 0">🎆 Activities timeline</h2><button class="btn" id="addAct">+ Activity</button></div>
+    ${conflicts.length?`<div class="box" style="border-left:4px solid var(--bad);margin-bottom:12px">⚠️ Possible scheduling conflicts: ${conflicts.map(esc).join(', ')}</div>`:''}
+    <div class="box">${sorted.length?sorted.map(a=>`
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed #eee">
+        <div style="min-width:110px;font-weight:700;color:var(--magenta)">${esc(a.start||'—')}${a.end?' – '+esc(a.end):''}</div>
+        <div style="flex:1"><b>${esc(a.name)}</b> <span class="pill ${a.status==='Ready'||a.status==='Done'?'ok':''}">${esc(a.status||'Planned')}</span>
+          <div style="font-size:.85rem;color:var(--muted)">${esc(a.organizer||'No coordinator')} ${a.dependsOn?'· after '+esc(a.dependsOn):''} ${a.setup?'· setup: '+esc(a.setup):''}</div></div>
+        <div><button class="btn small ghost" data-edit="${a.id}">Edit</button> <button class="btn small danger" data-del="${a.id}">✕</button></div>
+      </div>`).join(''):'<div class="empty">No activities yet. Build the evening timeline here.</div>'}</div>`;
+  document.getElementById('addAct').onclick=()=> openDialog('New activity', actFields(), {status:'Planned'}, d=>{ addRecord('activities', d, 'activity', 'Activity added'); renderActivities(); });
+  panel.querySelectorAll('[data-edit]').forEach(b=> b.onclick=()=>{ const id=b.dataset.edit; openDialog('Edit activity', actFields(), DB.activities.find(x=>x.id===id), d=>{ updateRecord('activities', id, d, 'activity', 'Edited'); renderActivities(); }); });
+  panel.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ const id=b.dataset.del; confirmDialog('Delete this activity?', ()=>{ deleteRecord('activities', id, 'activity'); renderActivities(); }); });
+}
+function gameFields(){
+  return [
+    {key:'name',label:'Game',required:true,full:true},
+    {key:'audience',label:'Audience',type:'select',options:['Kids','Adults','Family','All']},
+    {key:'ageGroup',label:'Age group'},
+    {key:'coordinator',label:'Coordinator'},
+    {key:'participants',label:'Participants / teams',type:'number',step:1},
+    {key:'equipment',label:'Equipment',type:'textarea',full:true},
+    {key:'prizes',label:'Prizes',type:'textarea',full:true},
+    {key:'prizeCost',label:'Prize cost ($)',type:'number',step:'0.01'},
+    {key:'setupMins',label:'Setup (mins)',type:'number',step:1},
+    {key:'durationMins',label:'Duration (mins)',type:'number',step:1},
+    {key:'status',label:'Status',type:'select',options:['Idea','Preparing','Ready','Done']},
+    {key:'rules',label:'Rules / instructions',type:'textarea',full:true},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderGames(){
+  listView('panel-games','🎲 Games',{
+    collection:'games', searchKeys:['name','coordinator','audience','prizes'], sortKey:'name',
+    filters:[{key:'audience',label:'audiences',options:['Kids','Adults','Family','All']},{key:'status',label:'statuses',options:['Idea','Preparing','Ready','Done']}],
+    table: rows => renderTable(rows,[
+      {key:'name',label:'Game',render:r=>`${esc(r.name)}<div style="font-size:.78rem;color:var(--muted)">${esc(r.rules?r.rules.slice(0,80):'')}</div>`},
+      {key:'audience',label:'Audience'},{key:'coordinator',label:'Coordinator'},
+      {key:'participants',label:'Teams / people'},
+      {key:'prizeCost',label:'Prize cost',render:r=>money(r.prizeCost)},
+      {key:'durationMins',label:'Min',render:r=>num(r.durationMins)||'—'},
+      {key:'status',label:'Status',render:r=>`<span class="pill ${r.status==='Ready'||r.status==='Done'?'ok':''}">${esc(r.status||'Idea')}</span>`}
+    ],{empty:'No games yet.',actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`}),
+    onAdd: ()=> openDialog('New game', gameFields(), {audience:'Kids',status:'Idea'}, d=>{ addRecord('games', d, 'game', 'Game added'); renderGames(); }),
+    onEdit: id=>{ openDialog('Edit game', gameFields(), DB.games.find(x=>x.id===id), d=>{ updateRecord('games', id, d, 'game', 'Edited'); renderGames(); }); },
+    onDelete: id=>{ const x=DB.games.find(y=>y.id===id); confirmDialog(`Delete the game "${x.name}"?`, ()=>{ deleteRecord('games', id, 'game'); renderGames(); }); }
+  });
+}
+
+/* ============ VERSION HISTORY ============ */
+function renderHistory(){
+  const panel = document.getElementById('panel-history');
+  const types = [...new Set(DB.history.map(h=>h.recordType))];
+  panel.innerHTML = `<div class="toolbar"><h2 style="margin:0 12px 0 0">📜 Version history</h2>
+    <input id="hq" class="grow" type="search" placeholder="Search by record ID or text…">
+    <select id="ht"><option value="">All record types</option>${types.map(t=>`<option>${esc(t)}</option>`).join('')}</select>
+    <select id="ha"><option value="">All actions</option><option>create</option><option>update</option><option>delete</option><option>restore</option></select></div>
+    <p style="font-size:.85rem;color:var(--muted)">Audit events are append-only. Editor label is a shared committee label — individual editors are not identified. Restoring creates a new audit event.</p>
+    <div id="hbody"></div>`;
+  const draw=()=>{
+    const q=document.getElementById('hq').value.toLowerCase(), t=document.getElementById('ht').value, a=document.getElementById('ha').value;
+    const rows=DB.history.filter(h=>(!t||h.recordType===t)&&(!a||h.action===a)&&(!q||[h.recordId,h.summary,h.field,String(h.before),String(h.after)].join(' ').toLowerCase().includes(q))).slice(0,300);
+    document.getElementById('hbody').innerHTML = renderTable(rows,[
+      {key:'at',label:'When'},{key:'recordType',label:'Type'},{key:'recordId',label:'Record ID'},
+      {key:'action',label:'Action'},{key:'field',label:'Field'},
+      {key:'before',label:'Previous',render:r=>esc(String(r.before??'').slice(0,60))},
+      {key:'after',label:'New',render:r=>esc(String(r.after??'').slice(0,60))},
+      {key:'summary',label:'Summary'}
+    ],{empty:'No changes recorded yet.',actions:r=> r.action==='update' && r.field ? `<button class="btn small ghost" data-restore="${r.id}">Restore previous</button>` : ''});
+  };
+  ['hq','ht','ha'].forEach(id=> document.getElementById(id).oninput=draw);
+  panel.addEventListener('click', e=>{
+    const b=e.target.closest('[data-restore]'); if(!b) return;
+    const h=DB.history.find(x=>x.id===b.dataset.restore); if(!h) return;
+    const coll = Object.keys(RT).find(k=>RT[k]===h.recordType) || (String(h.recordType).startsWith('c_') ? h.recordType : undefined);
+    if(!coll || !DB[coll].find(r=>r.id===h.recordId)){ toast('That record no longer exists'); return; }
+    confirmDialog(`Restore "${h.field}" to "${h.before}"? A new audit event will record the restore.`, ()=>{
+      const rec=DB[coll].find(r=>r.id===h.recordId); const old=rec[h.field];
+      rec[h.field]=h.before; rec.updatedAt=nowStamp();
+      audit(h.recordType,h.recordId,'restore',h.field,old,h.before,'Restored earlier value');
+      persist(); draw(); toast('Restored and logged');
+    });
+  });
+  draw();
+}
+
+/* ============ SETTINGS & DATA MANAGEMENT ============ */
+function renderSettingsBase(){
+  const e = DB.event;
+  const panel = document.getElementById('panel-settings');
+  const counts = ['registrations','waitlist','logistics','menu','purchases','sponsors','income','expenses','activities','games','performances'].map(k=>`${k}: ${DB[k].length}`).join(' · ');
+  panel.innerHTML = `
+    <h2>⚙️ Settings &amp; data management</h2>
+    <div class="grid2" style="margin-top:0">
+      <div class="box"><h3>Event details</h3>
+        <div class="fgrid">
+          <label class="full">Event name<input id="s_name" value="${esc(e.name)}"></label>
+          <label>Date<input id="s_date" type="date" value="${esc(e.date)}"></label>
+          <label>Capacity (attendees)<input id="s_cap" type="number" value="${e.capacity}"></label>
+          <label>Adult price ($)<input id="s_ap" type="number" value="${e.adultPrice}"></label>
+          <label>Kids 5–12 price ($)<input id="s_kp" type="number" value="${e.kidPrice}"></label>
+          <label>Approved budget ($)<input id="s_bud" type="number" value="${e.budget}"></label>
+          <label class="full">Venue<input id="s_venue" value="${esc(e.venue)}"></label>
+        </div>
+        <div class="dlg-actions"><button class="btn" id="saveCfg">Save settings</button></div>
+      </div>
+      <div class="box"><h3>Database connection</h3>
+        <p>Storage: ${connStatus()}</p>
+        <p style="font-size:.85rem;color:var(--muted)">${Backend.mode==='cloud' ? 'Changes sync live across devices. Each save is version-checked, so two people saving at the same moment cannot silently overwrite each other. Every change is kept in Version History.' : 'Data is saved only in this browser. To share it between committee members, add your Firebase config (see setup steps) and reload.'}</p>
+        <p style="font-size:.85rem">Records: ${esc(counts)}</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="box"><h3>Import &amp; export</h3>
+        <div class="toolbar"><button class="btn ghost small" id="exBackup">⬇ Full backup (JSON)</button>
+          <label class="btn ghost small" style="cursor:pointer">⬆ Restore from backup<input id="restoreFile" type="file" accept=".json" hidden></label></div>
+        <p style="font-size:.85rem;color:var(--muted)">Import registrations from the Registrations tab (Excel/CSV). Restoring a backup replaces all current data — you will be asked to confirm.</p>
+      </div>
+      <div class="box" style="border:1px solid #f5c6d4"><h3 style="color:var(--bad)">Danger zone</h3>
+        <p style="font-size:.85rem">Each action states what it affects. Nothing here can be undone except by restoring a backup.</p>
+        <div class="toolbar"><button class="btn danger small" id="clearHist">Clear version history only</button><button class="btn danger small" id="wipeAll">Erase ALL event data</button></div>
+      </div>
+    </div>`;
+  document.getElementById('saveCfg').onclick=()=>{
+    const old={...DB.event};
+    DB.event = { ...DB.event, name:val('s_name'), date:val('s_date'), capacity:num(val('s_cap')), adultPrice:num(val('s_ap')), kidPrice:num(val('s_kp')), budget:num(val('s_bud')), venue:val('s_venue') };
+    audit('settings','event','update','event config','',JSON.stringify(DB.event),'Event settings changed');
+    persist(); renderAll(); toast('Settings saved');
+  };
+  document.getElementById('exBackup').onclick=()=> download(`retreat-diwali-backup-${todayISO()}.json`, JSON.stringify(DB,null,2), 'application/json');
+  document.getElementById('restoreFile').onchange=async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    let data; try{ data=JSON.parse(await f.text()); }catch(err){ toast('Not a valid backup file'); return; }
+    if(!data.registrations||!data.event){ toast('Backup is missing required sections'); return; }
+    confirmDialog(`Replace ALL current data with this backup (${data.registrations.length} registrations, ${(data.history||[]).length} history events)? This affects all event data.`, ()=>{
+      DB=data; persist(); renderAll(); toast('Backup restored');
+    });
+  };
+  document.getElementById('clearHist').onclick=()=> confirmDialog('Clear the version history? This affects the audit trail only, not your records.', ()=>{ DB.history=[]; persist(); renderHistory(); });
+  document.getElementById('wipeAll').onclick=()=> confirmDialog('Erase ALL event data — registrations, finance, everything? This cannot be undone unless you have a backup.', ()=>{ DB=defaultDoc(); persist(); renderAll(); toast('All event data erased'); });
+}
+const val = id => document.getElementById(id).value.trim();
+
+/* ============ DYNAMIC TABS ============
+   DB.tabs is the single source of truth for the navigation. Built-in tabs
+   keep their specialised screens; custom tabs use a generic table driven by
+   their column list. Every data tab (built-in or custom) can be imported into,
+   exported from, and downloaded as a blank template. */
+const BUILTIN_TABS = [
+  {id:'dashboard',title:'Dashboard',icon:'🏠',fixed:true},
+  {id:'registrations',title:'Registrations',icon:'👨‍👩‍👧',collection:'registrations',fields:()=>regFields()},
+  {id:'waitlist',title:'Waitlist',icon:'⏳',collection:'waitlist',fields:()=>waitFields()},
+  {id:'logistics',title:'Logistics',icon:'🧰',collection:'logistics',fields:()=>logFields()},
+  {id:'food',title:'Food & Catering',icon:'🍛',collection:'menu',fields:()=>foodFields()},
+  {id:'purchases',title:'Purchases & Supplies',icon:'🛒',collection:'purchases',fields:()=>purFields()},
+  {id:'sponsors',title:'Sponsorships',icon:'🏅',collection:'sponsors',fields:()=>sponFields()},
+  {id:'finance',title:'Finance & Budget',icon:'💰',collection:'expenses',fields:()=>expFields()},
+  {id:'activities',title:'Activities',icon:'🎆',collection:'activities',fields:()=>actFields()},
+  {id:'games',title:'Games',icon:'🎲',collection:'games',fields:()=>gameFields()},
+  {id:'dance',title:'Dance & Fun',icon:'💃',collection:'performances',fields:()=>perfFields()},
+  {id:'history',title:'Version History',icon:'📜',fixed:true},
+  {id:'settings',title:'Settings',icon:'⚙️',fixed:true}
+];
+// Audit record types used by Version History (so restore can find the collection)
+const RT = {registrations:'registration',waitlist:'waitlist',logistics:'logistics',menu:'catering',purchases:'purchase',sponsors:'sponsorship',expenses:'finance',activities:'activity',games:'game',performances:'performance'};
+
+const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const slug = s => norm(s).replace(/ /g,'-') || 'data';
+function coll(name){ if(!DB[name]) DB[name]=[]; return DB[name]; }
+const isFixed = id => !!(BUILTIN_TABS.find(b=>b.id===id)||{}).fixed;
+const isDataTab = t => !!(t.custom || (BUILTIN_TABS.find(b=>b.id===t.id)||{}).collection);
+function fmtVal(f,v){ if(v===undefined||v===null||v==='') return ''; return f.type==='number' ? String(num(v)) : String(v); }
+
+function ensureTabs(){
+  if(!Array.isArray(DB.tabs)) DB.tabs=[];
+  for(const b of BUILTIN_TABS){
+    if(!DB.tabs.some(t=>t.id===b.id)) DB.tabs.push({id:b.id,title:b.title,icon:b.icon,hidden:false,custom:false});
+  }
+}
+function tabDef(id){
+  const t=DB.tabs.find(x=>x.id===id); if(!t) return null;
+  if(t.custom) return {...t, collection:t.id, fields:()=>customFields(t)};
+  const b=BUILTIN_TABS.find(x=>x.id===id)||{};
+  return {...t, collection:b.collection, fields:b.fields||(()=>[])};
+}
+function customFields(t){
+  const cols=t.columns.map(c=>({key:c.key,label:c.label,type:c.type,options:c.options,step:c.type==='number'?'0.01':undefined}));
+  if(!cols.some(c=>c.key==='f_notes')) cols.push({key:'f_notes',label:'Notes',type:'textarea',full:true});
+  return cols;
+}
+function parseColumns(spec){
+  const used={}, cols=[];
+  String(spec||'').split(',').map(s=>s.trim()).filter(Boolean).forEach(part=>{
+    const [labelRaw,...rest]=part.split(':');
+    const label=labelRaw.trim(); if(!label) return;
+    const hint=rest.join(':').trim();
+    let type='text', options;
+    if(/^number$/i.test(hint)) type='number';
+    else if(/^date$/i.test(hint)) type='date';
+    else if(hint.includes('|')){ type='select'; options=hint.split('|').map(x=>x.trim()).filter(Boolean); }
+    let key='f_'+norm(label).replace(/ /g,'_'); if(key==='f_') key='f_col'+(cols.length+1);
+    while(used[key]) key+='_'; used[key]=1;
+    cols.push({key,label,type,options});
+  });
+  if(!cols.length) cols.push({key:'f_name',label:'Name',type:'text'});
+  return cols;
+}
+function specFromColumns(cols){
+  return cols.map(c=> c.label + (c.type==='number'?':number':c.type==='date'?':date':c.type==='select'?':'+(c.options||[]).join('|'):'')).join(', ');
+}
+function createCustomTab(title, icon, columns){
+  const id=uid('c_');
+  DB.tabs.push({id, title:title||'New tab', icon:icon||'📋', hidden:false, custom:true, collection:id, columns});
+  coll(id);
+  audit('tab', id, 'create', 'tab', '', title, `Created tab "${title}"`);
+  return id;
+}
+
+/* ============ NAVIGATION & ROUTING ============ */
+function renderNav(){
+  const nav=document.getElementById('tabnav'); if(!nav) return;
+  const cur=currentTab();
+  nav.innerHTML = DB.tabs.filter(t=>!t.hidden).map(t=>
+    `<button role="tab" data-tab="${esc(t.id)}" aria-selected="${t.id===cur}">${esc(t.icon||'')} ${esc(t.title)}</button>`).join('');
+  nav.querySelectorAll('button').forEach(b=> b.onclick=()=> showTab(b.dataset.tab));
+  const main=document.querySelector('main');
+  DB.tabs.forEach(t=>{
+    if(!document.getElementById('panel-'+t.id)){ const s=document.createElement('section'); s.className='panel'; s.id='panel-'+t.id; main.appendChild(s); }
+  });
+  document.querySelectorAll('section.panel').forEach(s=>{ if(!DB.tabs.some(t=>'panel-'+t.id===s.id)) s.remove(); });
+}
+function showTab(name){
+  const t=DB.tabs.find(x=>x.id===name);
+  if(!t || t.hidden) name='dashboard';
+  document.querySelectorAll('nav.tabs button').forEach(b=> b.setAttribute('aria-selected', String(b.dataset.tab===name)));
+  document.querySelectorAll('section.panel').forEach(s=> s.classList.toggle('active', s.id==='panel-'+name));
+  (RENDERERS[name] || (()=>renderCustom(name)))();
+  try{ history.replaceState(null,'','#'+name); }catch(e){}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderAll(){
+  ensureTabs(); renderNav();
+  const cur=currentTab()||'dashboard';
+  (RENDERERS[cur] || (()=>renderCustom(cur)))();
+}
+const RENDERERS = {
+  dashboard:()=>renderDashboard(), registrations:()=>renderRegistrations(), waitlist:()=>renderWaitlist(),
+  logistics:()=>renderLogistics(), food:()=>renderFood(), purchases:()=>renderPurchases(), sponsors:()=>renderSponsors(),
+  finance:()=>renderFinance(), activities:()=>renderActivities(), games:()=>renderGames(), dance:()=>renderDance(),
+  history:()=>renderHistory(), settings:()=>renderSettings()
+};
+window.addEventListener('hashchange', ()=>{ const t=location.hash.slice(1); if(DB.tabs.some(x=>x.id===t)) showTab(t); });
+
+/* Generic table for custom tabs (same toolbar, search, sort and CRUD as the built-in tables) */
+function renderCustom(id){
+  const def=tabDef(id); if(!def) return;
+  const fields=def.fields();
+  const short=fields.filter(f=>f.key!=='f_notes').slice(0,6);
+  listView('panel-'+id, `${esc(def.icon||'')} ${esc(def.title)}`, {
+    collection:def.collection, searchKeys:fields.map(f=>f.key), sortKey:fields[0]?.key,
+    filters:fields.filter(f=>f.type==='select').map(f=>({key:f.key,label:f.label,options:f.options})),
+    table: rows => renderTable(rows, short.map(f=>({key:f.key,label:f.label,render:r=>esc(fmtVal(f,r[f.key]))})),
+      {actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`,
+       empty:'No rows yet. Add one, or upload an Excel file.'}),
+    onAdd: ()=> openDialog(`New ${def.title} row`, fields, {}, d=>{ addRecord(def.collection, d, def.collection, 'Row added'); renderCustom(id); renderDashboard(); }),
+    onEdit: rid=>{ const r=coll(def.collection).find(x=>x.id===rid); openDialog(`Edit ${def.title} row`, fields, r, d=>{ updateRecord(def.collection, rid, d, def.collection, 'Edited'); renderCustom(id); }); },
+    onDelete: rid=>{ const r=coll(def.collection).find(x=>x.id===rid); confirmDialog(`Delete this row from "${def.title}"? Only this one row is removed.`, ()=>{ deleteRecord(def.collection, rid, def.collection); renderCustom(id); }); }
+  });
+}
+
+/* ============ TAB MANAGER (Settings) ============ */
+function renderSettings(){ renderSettingsBase(); renderTabManager(); }
+function renderTabManager(){
+  const panel=document.getElementById('panel-settings'); if(!panel) return;
+  let box=panel.querySelector('#tabMgr');
+  if(!box){ box=document.createElement('div'); box.id='tabMgr'; panel.prepend(box); }
+  const n=DB.tabs.length;
+  box.innerHTML = `<div class="box" style="margin-bottom:14px">
+    <div class="toolbar" style="justify-content:space-between;margin-top:0">
+      <h3 style="margin:0;color:var(--purple)">📑 Tabs &amp; data</h3>
+      <div class="toolbar" style="margin:0">
+        <button class="btn small" data-act="upload">⬆ Upload Excel / CSV</button>
+        <button class="btn small ghost" data-act="exportAll">⬇ Export all to Excel</button>
+        <button class="btn small ghost" data-act="newTab">＋ New tab</button>
+      </div></div>
+    <p style="font-size:.85rem;color:var(--muted);margin:4px 0 10px">Upload a sheet into any data tab, or create a new tab from a sheet. Hiding a tab never deletes its data. Renaming a column creates a new column; the old values stay under the old name.</p>
+    <div class="table-wrap"><table><thead><tr><th>Tab</th><th>Rows</th><th>Shown</th><th>Order</th><th>Actions</th></tr></thead><tbody>
+    ${DB.tabs.map((t,i)=>{
+      const data=isDataTab(t);
+      const rows=data ? coll(t.custom?t.id:tabDef(t.id).collection).length : '—';
+      return `<tr><td>${esc(t.icon||'')} ${esc(t.title)}${t.custom?' <span class="pill">custom</span>':''}</td>
+        <td>${rows}</td>
+        <td>${isFixed(t.id)?'always':`<button class="btn small ghost" data-act="vis" data-id="${esc(t.id)}">${t.hidden?'Show':'Hide'}</button>`}</td>
+        <td><button class="btn small ghost" data-act="up" data-id="${esc(t.id)}" ${i===0?'disabled':''}>▲</button> <button class="btn small ghost" data-act="down" data-id="${esc(t.id)}" ${i===n-1?'disabled':''}>▼</button></td>
+        <td>${data?`<button class="btn small ghost" data-act="tpl" data-id="${esc(t.id)}">Template</button> <button class="btn small ghost" data-act="xls" data-id="${esc(t.id)}">Excel</button>`:''}
+            <button class="btn small ghost" data-act="edit" data-id="${esc(t.id)}">Edit</button>
+            ${t.custom?`<button class="btn small danger" data-act="del" data-id="${esc(t.id)}">Delete</button>`:''}</td></tr>`;
+    }).join('')}
+    </tbody></table></div></div>`;
+  box.onclick = e=>{ const b=e.target.closest('[data-act]'); if(!b||b.disabled) return; tabAction(b.dataset.act, b.dataset.id); };
+}
+function tabAction(act,id){
+  const i=DB.tabs.findIndex(t=>t.id===id), t=DB.tabs[i];
+  if(act==='upload') return openImporter(null);
+  if(act==='exportAll') return exportWorkbook(DB.tabs.filter(isDataTab).map(x=>x.id), `retreat-diwali-${todayISO()}.xlsx`);
+  if(act==='newTab') return openNewTab();
+  if(act==='up'||act==='down'){
+    const j=act==='up'?i-1:i+1; if(j<0||j>=DB.tabs.length) return;
+    [DB.tabs[i],DB.tabs[j]]=[DB.tabs[j],DB.tabs[i]];
+    persist(); renderNav(); return renderTabManager();
+  }
+  if(!t) return;
+  if(act==='vis'){
+    t.hidden=!t.hidden; persist();
+    if(t.hidden && currentTab()===t.id) showTab('dashboard');
+    renderNav(); return renderTabManager();
+  }
+  if(act==='tpl') return exportTemplate(t.id);
+  if(act==='xls') return exportWorkbook([t.id], `${slug(t.title)}-${todayISO()}.xlsx`);
+  if(act==='edit') return openTabEdit(t);
+  if(act==='del') return deleteCustomTab(t);
+}
+function openNewTab(){
+  openDialog('New custom tab', [
+    {key:'title',label:'Tab name',required:true},
+    {key:'icon',label:'Icon (emoji)'},
+    {key:'columns',label:'Columns: comma-separated. Add :number, :date or :Option1|Option2',type:'textarea',full:true,required:true}
+  ], {icon:'📋', columns:'Name, Phone, Quantity:number, Due:date, Status:Open|Done'}, d=>{
+    const id=createCustomTab(d.title, d.icon, parseColumns(d.columns));
+    persist(); renderNav(); showTab(id);
+  });
+}
+function openTabEdit(t){
+  const fields=[{key:'title',label:'Tab name',required:true},{key:'icon',label:'Icon (emoji)'}];
+  const values={title:t.title, icon:t.icon};
+  if(t.custom){
+    fields.push({key:'columns',label:'Columns: comma-separated. Add :number, :date or :Option1|Option2',type:'textarea',full:true,required:true});
+    values.columns=specFromColumns(t.columns);
+  }
+  openDialog('Edit tab', fields, values, d=>{
+    t.title=d.title; t.icon=d.icon||t.icon;
+    if(t.custom){
+      const parsed=parseColumns(d.columns);
+      parsed.forEach(c=>{ const m=t.columns.find(o=>norm(o.label)===norm(c.label)); if(m) c.key=m.key; });
+      t.columns=parsed;
+    }
+    audit('tab', t.id, 'update', 'tab', '', d.title, 'Tab edited');
+    persist(); renderNav(); renderAll();
+  });
+}
+function deleteCustomTab(t){
+  const n=coll(t.id).length;
+  confirmDialog(`Delete the tab "${t.title}" and its ${n} row(s)? This affects only this tab. The deletion is logged in Version History.`, ()=>{
+    DB.tabs.splice(DB.tabs.indexOf(t),1); delete DB[t.id];
+    audit('tab', t.id, 'delete', '', `${n} rows`, '', `Deleted tab "${t.title}"`);
+    document.getElementById('panel-'+t.id)?.remove();
+    persist();
+    if(currentTab()===t.id) showTab('dashboard');
+    renderNav(); renderTabManager();
+  });
+}
+
+/* ============ EXCEL EXPORT & TEMPLATES ============ */
+function exportWorkbook(tabIds, filename){
+  const wb=XLSX.utils.book_new(), used=new Set();
+  tabIds.forEach(id=>{
+    const def=tabDef(id); if(!def||!def.collection) return;
+    const fields=def.fields();
+    const rows=coll(def.collection).map(r=>{ const o={}; fields.forEach(f=> o[f.label]= f.type==='number'? num(r[f.key]) : (r[f.key]??'')); return o; });
+    let name=def.title.replace(/[\\\/\?\*\[\]:]/g,'').slice(0,28)||'Sheet', n=name, k=2;
+    while(used.has(n)) n=name+' '+(k++); used.add(n);
+    const ws=rows.length ? XLSX.utils.json_to_sheet(rows) : XLSX.utils.aoa_to_sheet([fields.map(f=>f.label)]);
+    XLSX.utils.book_append_sheet(wb, ws, n);
+  });
+  if(!wb.SheetNames.length){ toast('Nothing to export'); return; }
+  XLSX.writeFile(wb, filename);
+  toast('Excel file downloaded');
+}
+function exportTemplate(id){
+  const def=tabDef(id); if(!def) return;
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([def.fields().map(f=>f.label)]), 'Template');
+  XLSX.writeFile(wb, `${slug(def.title)}-template.xlsx`);
+}
+
+/* ============ IMPORTER: Excel / CSV → any data tab ============
+   1) pick file  2) choose sheet + destination + column mapping
+   3) review counts, skipped rows, duplicates, preview  4) confirm and import.
+   Nothing is saved until step 4. */
+const SYN = {
+  family:['family name','full name','family'], contact:['primary contact','contact name','contact person','contact'],
+  phone:['phone number','phone','mobile','cell'], email:['email address','email','e mail'],
+  address:['address'], adults:['number of adults','adults'], kids:['kids between','children','kids'],
+  under5:['kids under','under 5','under5'], paid:['total amount paid','amount paid','paid'],
+  zelleName:['name on the zelle','zelle'], diet:['dietary needs','dietary','allergies','diet'],
+  registeredOn:['timestamp','registered on','registration date','date'],
+  notes:['notes','comments','comment'], status:['status'],
+  item:['item name','food item','item'], task:['task name','task'], description:['description'],
+  name:['name'], sponsor:['sponsor name','sponsor','business name'], source:['source'],
+  game:['game name'], group:['group name','participant group','group'], amount:['amount']
+};
+function autoMap(headers, fields){
+  const hs=headers.map((h,i)=>({i,n:norm(h)})), cands=[];
+  for(const f of fields){
+    const syns=[...(SYN[f.key]||[]), f.label, f.key].map(norm).filter(Boolean);
+    for(const h of hs) for(const s of syns){
+      if(h.n===s) cands.push({k:f.key,i:h.i,score:100+s.length});
+      else if((' '+h.n+' ').includes(' '+s+' ')) cands.push({k:f.key,i:h.i,score:s.length});
+    }
+  }
+  cands.sort((a,b)=>b.score-a.score);
+  const map={}, used=new Set();
+  for(const c of cands){ if(map[c.k]!==undefined||used.has(c.i)) continue; map[c.k]=c.i; used.add(c.i); }
+  return map;
+}
+function inferFields(headers, rows){
+  const used={};
+  return headers.map((h,i)=>{
+    let key='f_'+norm(h).replace(/ /g,'_'); if(key==='f_') key='f_col'+(i+1);
+    while(used[key]) key+='_'; used[key]=1;
+    const vals=rows.map(r=>r[i]).filter(v=>v!==null&&v!==undefined&&String(v).trim()!==''&&!/^(none|na|n\/a)$/i.test(String(v).trim()));
+    const allDates=vals.length>0 && vals.every(v=>v instanceof Date);
+    const allNums=vals.length>0 && !/phone|zip|postal|id$/i.test(h) && vals.every(v=>typeof v==='number'||/^\$?[\d,]+(\.\d+)?$/.test(String(v).trim()));
+    return {key, label:h, type:allDates?'date':allNums?'number':'text', required:false};
+  });
+}
+function cellVal(f, v){
+  if(v===null||v===undefined) return f.type==='number'?0:'';
+  if(v instanceof Date) return v.toISOString().slice(0,10);
+  if(f.type==='number'){ const n=Number(String(v).replace(/[$,\s]/g,'')); return Number.isFinite(n)?n:0; }
+  const s=String(v).replace(/\s+/g,' ').trim();
+  if(/^(none|n\/a|na|null|-)$/i.test(s)) return '';
+  return s;
+}
+let IMP=null;
+function openImporter(preferId){
+  IMP={sheetNames:[], sheet:'', headers:[], rows:[], target:preferId||'registrations', newTitle:'', newIcon:'📋', mode:'append', map:{}, mapFor:'', fields:[], plan:null, wb:null};
+  const dlg=document.getElementById('dlg'), f=document.getElementById('dlgForm');
+  f.innerHTML = `<h2>⬆ Upload data</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin:0 0 10px">Choose an Excel (.xlsx) or CSV file. The first row must hold column names. You review everything before anything is saved.</p>
+    <div class="fgrid"><label class="full">File<input type="file" id="impFile" accept=".xlsx,.xls,.csv"></label></div>
+    <div class="dlg-actions"><button type="button" class="btn ghost" id="impCancel">Cancel</button></div>`;
+  document.getElementById('impCancel').onclick=()=> dlg.close();
+  document.getElementById('impFile').onchange=async e=>{
+    const file=e.target.files[0]; if(!file) return;
+    try{ await readWorkbook(file); renderImpStep2(); }
+    catch(err){ console.error(err); toast('Could not read that file. Try .xlsx or .csv.'); }
+  };
+  if(!dlg.open) dlg.showModal();
+}
+async function readWorkbook(file){
+  const buf=await file.arrayBuffer();
+  IMP.wb=XLSX.read(buf,{type:'array',cellDates:true});
+  IMP.sheetNames=IMP.wb.SheetNames;
+  loadSheet(IMP.sheetNames[0]);
+}
+function loadSheet(name){
+  IMP.sheet=name; IMP.mapFor='';
+  const data=XLSX.utils.sheet_to_json(IMP.wb.Sheets[name],{header:1,defval:null,raw:true});
+  const lines=data.filter(r=>r.some(v=>v!==null&&v!==undefined&&String(v).trim()!==''));
+  IMP.headers=(lines[0]||[]).map((h,i)=>String(h??'').replace(/\s+/g,' ').trim()||`Column ${i+1}`);
+  IMP.rows=lines.slice(1);
+}
+function renderImpStep2(){
+  const f=document.getElementById('dlgForm');
+  const isNew=IMP.target==='__new__';
+  if(isNew){
+    IMP.fields=inferFields(IMP.headers, IMP.rows);
+    IMP.map=Object.fromEntries(IMP.fields.map((fd,i)=>[fd.key,i]));
+  } else {
+    IMP.fields=tabDef(IMP.target).fields();
+    const sig=IMP.target+'|'+IMP.sheet;
+    if(IMP.mapFor!==sig){ IMP.map=autoMap(IMP.headers, IMP.fields); IMP.mapFor=sig; }
+  }
+  const targets=DB.tabs.filter(isDataTab);
+  f.innerHTML = `<h2>Map your columns</h2>
+    <div class="fgrid">
+      ${IMP.sheetNames.length>1?`<label class="full">Sheet<select id="impSheet">${IMP.sheetNames.map(s=>`<option ${s===IMP.sheet?'selected':''}>${esc(s)}</option>`).join('')}</select></label>`:''}
+      <label class="full">Import into<select id="impTarget">${targets.map(t=>`<option value="${esc(t.id)}" ${t.id===IMP.target?'selected':''}>${esc(t.icon||'')} ${esc(t.title)}</option>`).join('')}<option value="__new__" ${isNew?'selected':''}>＋ New tab from this sheet</option></select></label>
+      ${isNew
+        ? `<label>New tab name<input id="impNewTitle" value="${esc(IMP.newTitle||IMP.sheet)}"></label><label>Icon<input id="impNewIcon" value="${esc(IMP.newIcon)}"></label>`
+        : `<label class="full">When importing<select id="impMode"><option value="append" ${IMP.mode==='append'?'selected':''}>Add rows (skip duplicates)</option><option value="replace" ${IMP.mode==='replace'?'selected':''}>Replace all rows in this tab</option></select></label>`}
+    </div>
+    ${isNew
+      ? `<p style="font-size:.85rem;color:var(--muted)">Every column becomes a field. Numbers and dates are detected automatically. ${IMP.headers.length} columns, ${IMP.rows.length} rows.</p>`
+      : `<h3 style="margin:14px 0 6px;color:var(--purple)">Column mapping · ${IMP.headers.length} columns in file, ${IMP.rows.length} rows</h3>
+         <div class="fgrid">${IMP.fields.map(fd=>`<label>${esc(fd.label)}${fd.required?' *':''}<select data-map="${esc(fd.key)}"><option value="">— skip —</option>${IMP.headers.map((h,i)=>`<option value="${i}" ${IMP.map[fd.key]===i?'selected':''}>${esc(h)}</option>`).join('')}</select></label>`).join('')}</div>`}
+    <div class="dlg-actions"><button type="button" class="btn ghost" id="impCancel2">Cancel</button><button type="button" class="btn" id="impReview">Review →</button></div>`;
+  document.getElementById('impCancel2').onclick=()=> document.getElementById('dlg').close();
+  document.getElementById('impReview').onclick=readStep2AndReview;
+  const sh=document.getElementById('impSheet'); if(sh) sh.onchange=()=>{ loadSheet(sh.value); renderImpStep2(); };
+  document.getElementById('impTarget').onchange=e=>{ IMP.target=e.target.value; renderImpStep2(); };
+}
+function readStep2AndReview(){
+  if(IMP.target==='__new__'){
+    IMP.newTitle=(document.getElementById('impNewTitle').value||IMP.sheet).trim();
+    IMP.newIcon=(document.getElementById('impNewIcon').value||'📋').trim();
+  } else {
+    IMP.mode=document.getElementById('impMode').value;
+    IMP.map={};
+    document.querySelectorAll('[data-map]').forEach(s=>{ if(s.value!=='') IMP.map[s.dataset.map]=Number(s.value); });
+    IMP.mapFor=IMP.target+'|'+IMP.sheet;
+  }
+  IMP.plan=buildPlan();
+  renderImpStep3();
+}
+function buildPlan(){
+  const isNew=IMP.target==='__new__', fields=IMP.fields;
+  const existing = isNew ? [] : coll(tabDef(IMP.target).collection).slice();
+  const dedupe = !isNew && IMP.mode!=='replace';
+  const keyFields = fields.filter(f=>f.required).map(f=>f.key);
+  const hasEmail = fields.some(f=>f.key==='email');
+  const keyOf = r => keyFields.map(k=>String(r[k]??'')).join('|').toLowerCase();
+  const seen = new Set(dedupe && keyFields.length ? existing.map(keyOf) : []);
+  const seenMail = new Set(dedupe && hasEmail ? existing.map(r=>String(r.email||'').toLowerCase()).filter(Boolean) : []);
+  const recs=[], skipped=[], dupes=[], warnings=[];
+  IMP.rows.forEach((raw,ri)=>{
+    const line=ri+2;
+    if(raw.every(v=>v===null||v===undefined||String(v).trim()==='')) return;
+    const rec={};
+    for(const f of fields){
+      const hi=IMP.map[f.key];
+      rec[f.key]=cellVal(f, hi===undefined?null:raw[hi]);
+      if(rec[f.key]==='' && f.type==='select' && f.options && f.options.length) rec[f.key]=f.options[0];
+    }
+    const missing=fields.filter(f=>f.required && rec[f.key]==='').map(f=>f.label);
+    if(missing.length){ skipped.push({line, why:'missing '+missing.join(', ')}); return; }
+    const k=keyOf(rec), em=hasEmail ? String(rec.email||'').toLowerCase() : '';
+    if(dedupe && keyFields.length && (seen.has(k) || (em && seenMail.has(em)))){
+      dupes.push({line, name:keyFields.map(x=>rec[x]).join(' · ')}); return;
+    }
+    if(keyFields.length) seen.add(k);
+    if(em) seenMail.add(em);
+    for(const f of fields) if(f.type==='select' && rec[f.key] && !(f.options||[]).includes(rec[f.key])) warnings.push(`Row ${line}: "${rec[f.key]}" in ${f.label}`);
+    recs.push(rec);
+  });
+  return {recs, skipped, dupes, warnings, replaceCount: (isNew || IMP.mode!=='replace') ? 0 : existing.length};
+}
+function renderImpStep3(){
+  const p=IMP.plan, f=document.getElementById('dlgForm');
+  const isNew=IMP.target==='__new__';
+  const name = isNew ? IMP.newTitle : tabDef(IMP.target).title;
+  const cols=IMP.fields.slice(0,5);
+  f.innerHTML = `<h2>Review before importing</h2>
+    <p>Destination: <b>${esc(name)}</b> · sheet "${esc(IMP.sheet)}" · ${isNew?'new tab':IMP.mode==='replace'?'replace all rows':'add rows'}</p>
+    <div class="cards">
+      <div class="card"><div class="label">Ready to import</div><div class="value">${p.recs.length}</div></div>
+      <div class="card ${p.skipped.length?'warn':''}"><div class="label">Skipped</div><div class="value">${p.skipped.length}</div><div class="hint">missing required data</div></div>
+      <div class="card ${p.dupes.length?'warn':''}"><div class="label">Duplicates</div><div class="value">${p.dupes.length}</div><div class="hint">not imported</div></div>
+    </div>
+    ${p.replaceCount?`<p><span class="pill bad">Replace mode: ${p.replaceCount} existing rows will be deleted</span></p>`:''}
+    ${p.skipped.length?`<details><summary>Skipped rows</summary><ul style="font-size:.85rem">${p.skipped.slice(0,100).map(s=>`<li>Row ${s.line}: ${esc(s.why)}</li>`).join('')}</ul></details>`:''}
+    ${p.dupes.length?`<details><summary>Duplicates not imported</summary><ul style="font-size:.85rem">${p.dupes.slice(0,100).map(s=>`<li>Row ${s.line}: ${esc(s.name)}</li>`).join('')}</ul></details>`:''}
+    ${p.warnings.length?`<details><summary>${p.warnings.length} value(s) not in the standard list (kept as typed)</summary><ul style="font-size:.85rem">${p.warnings.slice(0,100).map(w=>`<li>${esc(w)}</li>`).join('')}</ul></details>`:''}
+    <h3 style="margin:12px 0 6px;color:var(--purple)">Preview (first 5 rows)</h3>
+    ${renderTable(p.recs.slice(0,5), cols.map(fd=>({key:fd.key,label:fd.label,render:r=>esc(fmtVal(fd,r[fd.key]))})), {empty:'Nothing to import.'})}
+    <div class="dlg-actions"><button type="button" class="btn ghost" id="impBack">← Back</button><button type="button" class="btn" id="impGo" ${p.recs.length?'':'disabled'}>Import ${p.recs.length} row(s)</button></div>`;
+  document.getElementById('impBack').onclick=renderImpStep2;
+  document.getElementById('impGo').onclick=()=>{
+    const msg = isNew ? `Create the tab "${name}" with ${p.recs.length} rows?`
+      : IMP.mode==='replace' ? `DELETE all ${p.replaceCount} existing rows in "${name}" and replace them with ${p.recs.length} rows? Other tabs are not affected.`
+      : `Add ${p.recs.length} rows to "${name}"? ${p.dupes.length} duplicate(s) will be skipped.`;
+    confirmDialog(msg, commitImport);
+  };
+}
+function commitImport(){
+  const p=IMP.plan, isNew=IMP.target==='__new__', mode=IMP.mode;
+  let tabId=IMP.target;
+  if(isNew) tabId=createCustomTab(IMP.newTitle, IMP.newIcon, IMP.fields.map(f=>({key:f.key,label:f.label,type:f.type,options:f.options})));
+  const def=tabDef(tabId), c=coll(def.collection);
+  const replaced = (!isNew && mode==='replace') ? c.length : 0;
+  if(replaced) c.length=0;
+  const now=nowStamp();
+  p.recs.forEach(r=>{ r.id=uid(def.collection.slice(0,2)); r.createdAt=now; r.updatedAt=now; c.push(r); });
+  audit(RT[def.collection]||def.collection, def.collection, 'create', '', '', `${p.recs.length} rows`,
+    `Imported ${p.recs.length} rows from "${IMP.sheet}"${replaced?` (replaced ${replaced} existing rows)`:''}`);
+  persist();
+  document.getElementById('dlg').close();
+  renderNav(); renderAll(); renderDashboard();
+  toast(`Imported ${p.recs.length} rows into ${def.title}`);
+}
+
+/* Sparkles: lightweight canvas particles; disabled for reduced motion */
+(function sparkles(){
+  const c=document.getElementById('sparkles'); if(!c) return;
+  const ctx=c.getContext('2d'); const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let parts=[]; const resize=()=>{ c.width=c.offsetWidth; c.height=c.offsetHeight; };
+  resize(); addEventListener('resize', resize);
+  const colors=['#ffd45c','#ff8c1a','#ff4d8d','#ffffff'];
+  const spawn=()=> parts.push({x:Math.random()*c.width,y:c.height+4,vy:-(0.3+Math.random()*0.6),r:1+Math.random()*2,a:1,col:colors[Math.random()*4|0]});
+  const tick=()=>{ ctx.clearRect(0,0,c.width,c.height);
+    if(Math.random()<0.12 && parts.length<60) spawn();
+    parts=parts.filter(p=>p.a>0.02 && p.y>-10);
+    for(const p of parts){ p.y+=p.vy; p.a-=0.003; ctx.globalAlpha=p.a; ctx.fillStyle=p.col; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); }
+    ctx.globalAlpha=1; if(!reduce) requestAnimationFrame(tick); };
+  if(!reduce) tick();
+})();
+
+/* Start: build tabs from saved config, render, open the tab in the URL hash, then connect to Firebase */
+ensureTabs();
+renderNav();
+renderAll();
+const startTab = location.hash.slice(1);
+showTab(DB.tabs.some(t=>t.id===startTab && !t.hidden) ? startTab : 'dashboard');
+renderHistory();
+renderSettings();
+connectFirebase().then(()=>{ ensureTabs(); renderNav(); renderAll(); renderHistory(); renderSettings(); });
+
+/* Restored helpers: dashboard and dance */
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+function categoryBars(){
+  const cats = {};
+  DB.expenses.forEach(e=>{ cats[e.category] = cats[e.category]||{est:0,act:0}; cats[e.category].est+=num(e.estimated); cats[e.category].act+=num(e.actual); });
+  const keys = Object.keys(cats);
+  if(!keys.length) return '<div class="empty">Add expenses in Finance to see spending by category.</div>';
+  const max = Math.max(...keys.map(k=>Math.max(cats[k].est,cats[k].act)),1);
+  return keys.map(k=>`
+    <div class="barrow"><div class="meta"><span>${esc(k)}</span><span>${money(cats[k].act)} / ${money(cats[k].est)} ${cats[k].act>cats[k].est?'⚠️ over':''}</span></div>
+    <div class="bar"><i style="width:${Math.round(cats[k].act/max*100)}%;${cats[k].act>cats[k].est?'background:var(--bad)':''}"></i></div></div>`).join('');
+}
+function perfFields(){
+  return [
+    {key:'name',label:'Performance',required:true,full:true},
+    {key:'group',label:'Participant / group'},
+    {key:'coordinator',label:'Coordinator'},
+    {key:'contact',label:'Contact (optional)'},
+    {key:'participants',label:'Number of participants',type:'number',step:1},
+    {key:'durationMins',label:'Duration (mins)',type:'number',step:1},
+    {key:'rehearsal',label:'Rehearsal schedule'},
+    {key:'audio',label:'Music / audio needs'},
+    {key:'stage',label:'Stage / tech needs',type:'textarea',full:true},
+    {key:'props',label:'Props & costumes',type:'textarea',full:true},
+    {key:'estimated',label:'Estimated cost ($)',type:'number',step:'0.01'},
+    {key:'order',label:'Lineup position',type:'number',step:1},
+    {key:'status',label:'Status',type:'select',options:['Confirmed','Rehearsing','Costume pending','Ready','Cancelled']},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ];
+}
+function renderDance(){
+  const panel = document.getElementById('panel-dance');
+  const lineup = DB.performances.slice().sort((a,b)=>num(a.order)-num(b.order));
+  const incomplete = lineup.filter(p=>!p.audio||!p.stage||p.status==='Costume pending').length;
+  panel.innerHTML = `<div class="toolbar"><h2 style="margin:0 12px 0 0">💃 Dance &amp; Fun lineup</h2><button class="btn" id="addPerf">+ Performance</button></div>
+    <div class="cards" style="margin-bottom:12px"><div class="card"><div class="label">Performances</div><div class="value">${lineup.length}</div></div>
+    <div class="card ${incomplete?'warn':''}"><div class="label">Incomplete prep</div><div class="value">${incomplete}</div><div class="hint">missing audio/stage or costumes</div></div></div>
+    <div class="box">${lineup.length?lineup.map((p,i)=>`
+      <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed #eee">
+        <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(var(--gold),var(--saffron));display:grid;place-items:center;font-weight:800">${p.order||i+1}</div>
+        <div style="flex:1"><b>${esc(p.name)}</b> <span style="color:var(--muted)">by ${esc(p.group||'—')}</span>
+          <div style="font-size:.85rem;color:var(--muted)">${num(p.durationMins)} min · ${num(p.participants)} performers · coordinator: ${esc(p.coordinator||'—')} · rehearsal: ${esc(p.rehearsal||'TBD')}</div></div>
+        <span class="pill ${p.status==='Ready'?'ok':p.status==='Costume pending'?'wait':''}">${esc(p.status||'Confirmed')}</span>
+        <div><button class="btn small ghost" data-edit="${p.id}">Edit</button> <button class="btn small danger" data-del="${p.id}">✕</button></div>
+      </div>`).join(''):'<div class="empty">No performances yet. Kids\' performances are a major attendance driver — add them here.</div>'}</div>`;
+  document.getElementById('addPerf').onclick=()=> openDialog('New performance', perfFields(), {status:'Confirmed'}, d=>{ addRecord('performances', d, 'performance', 'Performance added'); renderDance(); });
+  panel.querySelectorAll('[data-edit]').forEach(b=> b.onclick=()=>{ const id=b.dataset.edit; openDialog('Edit performance', perfFields(), DB.performances.find(x=>x.id===id), d=>{ updateRecord('performances', id, d, 'performance', 'Edited'); renderDance(); }); });
+  panel.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ const id=b.dataset.del; confirmDialog('Delete this performance?', ()=>{ deleteRecord('performances', id, 'performance'); renderDance(); }); });
+}
+</script>
+</body>
+</html>
