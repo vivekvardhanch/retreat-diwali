@@ -369,8 +369,10 @@ function openDialog(title, fields, values, onSubmit){
   document.getElementById('dlgOk').onclick = ()=>{
     const data = {};
     for (const fd of fields){
-      const el = f.elements[fd.key];
-      data[fd.key] = fd.type==='number' ? num(el.value) : el.value.trim();
+      // Look up by name attribute: f.elements['item'] returns the collection's built-in item() method, not the input
+      const el = f.querySelector(`[name="${fd.key}"]`);
+      const raw = el ? el.value : '';
+      data[fd.key] = fd.type==='number' ? num(raw) : String(raw).trim();
     }
     const missing = fields.filter(fd=>fd.required && !String(data[fd.key]||'').trim());
     if (missing.length){ toast('Please fill: ' + missing.map(m=>m.label).join(', ')); return; }
