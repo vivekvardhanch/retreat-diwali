@@ -132,12 +132,12 @@ dialog form{padding:18px 20px;max-height:86vh;overflow:auto}
    pluggable: today it persists in this browser; swap `Backend` for a
    shared service (e.g. Firebase, once verified) without touching the UI. */
 const FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyCLldYswWZTY5K8kKp5tJEZCbreP6urtFo',
-  authDomain: 'retreat-diwali-event.firebaseapp.com',
-  projectId: 'retreat-diwali-event',
-  storageBucket: 'retreat-diwali-event.firebasestorage.app',
-  messagingSenderId: '215660754518',
-  appId: '1:215660754518:web:4ef0a3d6fad0ee5a926df7'
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_PROJECT.firebaseapp.com',
+  projectId: 'YOUR_PROJECT',
+  storageBucket: 'YOUR_PROJECT.appspot.com',
+  messagingSenderId: 'YOUR_SENDER_ID',
+  appId: 'YOUR_APP_ID'
 };
 const Backend = {
   key: 'retreat-diwali-v1',   // local cache / local-only mode
@@ -667,6 +667,7 @@ const LOG_STATUS=['Not Started','In Progress','Completed','Blocked'];
 const PRIORITY=['High','Medium','Low'];
 function logFields(){
   return [
+    {key:'paidBy',label:'Paid by (person)'},
     {key:'task',label:'Task',required:true,full:true},
     {key:'category',label:'Category',type:'select',options:['Venue','Equipment','Volunteers','Setup','Cleanup','Other']},
     {key:'owner',label:'Assigned to'},
@@ -709,6 +710,7 @@ function renderLogistics(){
 const FOOD_STATUS=['Planned','Quoted','Ordered','Partially Delivered','Delivered','Cancelled'];
 function foodFields(){
   return [
+    {key:'paidBy',label:'Paid by (person)'},
     {key:'item',label:'Food item',required:true},
     {key:'category',label:'Category',type:'select',options:['Starters','Mains','Breads','Sweets','Drinks','Desserts','Other']},
     {key:'mealType',label:'Meal type',type:'select',options:['Veg','Non-veg','Vegan','Jain','Gluten-free','Mixed']},
@@ -763,6 +765,7 @@ const PUR_STATUS=['Planned','To Purchase','Assigned','Ordered','Partially Purcha
 const PAY_STATUS=['Unpaid','Partially Paid','Paid'];
 function purFields(){
   return [
+    {key:'paidBy',label:'Paid by (person)'},
     {key:'item',label:'Item',required:true,full:true},
     {key:'category',label:'Category',type:'select',options:['Tableware','Drinks & ice','Gifts & goodies','Game prizes','Decorations','Cleaning','Stationery & printing','Misc']},
     {key:'qtyRequired',label:'Qty required',type:'number',step:1},
@@ -886,14 +889,16 @@ function financeTotals(){
 
   const logisticsActual = DB.logistics.reduce((s,l)=>s+num(l.actual),0);
 
-  const incurred = foodActual + purchaseActual + otherActual + logisticsActual;
-  const paid = foodAdvance + purchasePaid + otherPaid;
+  const rows = ledger();   // every cost on every tab, each counted once
+  const incurred = rows.reduce((s,r)=>s+r.actual,0);
+  const reimbursed = coll('reimbursements').reduce((s,x)=>s+num(x.amount),0);   // cash paid back to people
+  const paid = foodAdvance + purchasePaid + otherPaid + reimbursed;
   const outstanding = Math.max(0, incurred - paid);
   return {
-    pledged, received, sponsorReceived, otherIncome, regReceived,
+    pledged, received, sponsorReceived, otherIncome, regReceived, reimbursed,
     foodEstimated, foodActual, purchaseEstimated, purchaseActual,
     committedOpen, incurred, paid, outstanding,
-    estimatedTotal: foodEstimated + purchaseEstimated + otherEstimated,
+    estimatedTotal: rows.reduce((s,r)=>s+r.est,0),
     remaining: DB.event.budget - incurred,
     netCash: received - paid,
     variance: DB.event.budget - incurred
@@ -911,6 +916,7 @@ function incomeFields(){
 }
 function expFields(){
   return [
+    {key:'paidBy',label:'Paid by (person)'},
     {key:'description',label:'Description',required:true,full:true},
     {key:'category',label:'Category',type:'select',options:['Food & Catering','Purchases & Supplies','Logistics','Venue and equipment','Decorations',"Children's gifts",'Games and prizes','Dance and entertainment','Printing and stationery','Cleaning','Miscellaneous']},
     {key:'linkedId',label:'Linked record ID (optional)'},
@@ -923,54 +929,168 @@ function expFields(){
     {key:'notes',label:'Notes',type:'textarea',full:true}
   ];
 }
+/* ============ FINANCE: one ledger across all tabs + who gets paid back ============
+   Every cost in the portal (food, purchases, logistics, activities, games, dance, manual expenses)
+   is read into one ledger. Each cost can name who paid for it ("Paid by").
+   Owed to a person = what they paid out of pocket − what has been paid back to them. */
+const LEDGER_SOURCES = [
+  {coll:'menu', tab:'food', source:'Food & Catering', name:r=>r.item, category:()=>'Food & Catering',
+   actual:r=>num(r.actualTotal) || num(r.qtyReceived||r.qtyOrdered)*num(r.unitCost), est:r=>num(r.qtyRequired)*num(r.unitCost)},
+  {coll:'purchases', tab:'purchases', source:'Purchases & Supplies', name:r=>r.item, category:()=>'Purchases & Supplies',
+   actual:r=>num(r.qtyPurchased)*num(r.actUnit), est:r=>num(r.qtyRequired)*num(r.estUnit)},
+  {coll:'logistics', tab:'logistics', source:'Logistics', name:r=>r.task, category:()=>'Logistics',
+   actual:r=>num(r.actual), est:r=>num(r.estimated)},
+  {coll:'activities', tab:'activities', source:'Activities', name:r=>r.name, category:()=>'Activities',
+   actual:r=>num(r.actual), est:r=>num(r.estimated)},
+  {coll:'games', tab:'games', source:'Games & prizes', name:r=>r.name, category:()=>'Games and prizes',
+   actual:r=>num(r.prizeCost), est:r=>num(r.prizeCost)},
+  {coll:'performances', tab:'dance', source:'Dance & Fun', name:r=>r.name, category:()=>'Dance and entertainment',
+   actual:r=>num(r.estimated), est:r=>num(r.estimated)},
+  {coll:'expenses', tab:'finance', source:'Manual expense', name:r=>r.description, category:r=>r.category||'Miscellaneous',
+   actual:r=>num(r.actual), est:r=>num(r.estimated), skip:r=>!!r.linkedId}
+];
+
+function ledger(){
+  const rows=[];
+  for(const s of LEDGER_SOURCES){
+    for(const r of coll(s.coll)){
+      if(s.skip && s.skip(r)) continue;
+      rows.push({id:r.id, coll:s.coll, tab:s.tab, source:s.source, name:s.name(r)||'(unnamed)',
+        category:s.category(r), paidBy:String(r.paidBy||'').trim(), actual:s.actual(r), est:s.est(r)});
+    }
+  }
+  return rows;
+}
+
+function settlement(rows){
+  const map={};
+  const get=n=>{ const k=String(n||'').trim().toLowerCase(); if(!k) return null;
+    if(!map[k]) map[k]={name:String(n).trim(), items:0, paid:0, back:0}; return map[k]; };
+  rows.forEach(r=>{ const p=get(r.paidBy); if(!p) return; p.items++; p.paid+=r.actual; });
+  coll('reimbursements').forEach(x=>{ const p=get(x.person); if(p) p.back+=num(x.amount); });
+  return Object.values(map).map(p=>({...p, owed:p.paid-p.back})).sort((a,b)=>b.owed-a.owed);
+}
+
+function openPayback(person, amount){
+  openDialog('Record payment back', [
+    {key:'person',label:'Paid back to',required:true},
+    {key:'amount',label:'Amount ($)',type:'number',step:'0.01',required:true},
+    {key:'date',label:'Date',type:'date',default:todayISO()},
+    {key:'method',label:'Method (cash, Zelle, check)'},
+    {key:'reference',label:'Reference'},
+    {key:'notes',label:'Notes',type:'textarea',full:true}
+  ], {person:person||'', amount: amount>0 ? Number(amount.toFixed(2)) : ''}, d=>{
+    addRecord('reimbursements', d, 'reimbursement', `Paid back ${d.person} ${money(d.amount)}`);
+    renderFinance(); renderDashboard();
+  });
+}
+
+let FIN={source:'', person:''};
 function renderFinance(){
-  const f = financeTotals();
-  const cats={}; DB.expenses.forEach(e=>{ const c=e.category||'Miscellaneous'; cats[c]=cats[c]||{est:0,act:0}; cats[c].est+=num(e.estimated); cats[c].act+=num(e.actual); });
-  const over = Object.entries(cats).filter(([,v])=>v.act>v.est);
-  const panel = document.getElementById('panel-finance');
+  const panel=document.getElementById('panel-finance'); if(!panel) return;
+  const f=financeTotals(), rows=ledger(), people=settlement(rows);
+  const owedTotal=people.filter(p=>p.owed>0).reduce((s,p)=>s+p.owed,0);
+  const unassigned=rows.filter(r=>!r.paidBy && r.actual>0);
+  const awaiting=rows.filter(r=>r.paidBy && !r.actual).length;
+  const sources=[...new Set(rows.map(r=>r.source))];
+  const persons=[...new Set(rows.map(r=>r.paidBy).filter(Boolean))].sort();
+  const shown=rows.filter(r=>(!FIN.source||r.source===FIN.source) && (!FIN.person||r.paidBy===FIN.person));
+  const shownActual=shown.reduce((s,r)=>s+r.actual,0), shownEst=shown.reduce((s,r)=>s+r.est,0);
+  const reimb=coll('reimbursements').slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+
   panel.innerHTML = `
     <div class="toolbar"><h2 style="margin:0 12px 0 0">💰 Finance &amp; Budget</h2>
-      <button class="btn" id="addExp">+ Expense</button><button class="btn ghost" id="addInc">+ Income</button>
-      <button class="btn ghost" id="exportFin">⬇ Report CSV</button></div>
+      <button class="btn" id="addPay">+ Paid back</button>
+      <button class="btn ghost" id="addExp">+ Expense</button>
+      <button class="btn ghost" id="addInc">+ Income</button>
+      <button class="btn ghost" id="exportFin">⬇ Ledger CSV</button></div>
+
     <div class="cards">
       <div class="card"><div class="label">Approved budget</div><div class="value">${money(DB.event.budget)}</div></div>
-      <div class="card"><div class="label">Expenses incurred</div><div class="value">${money(f.incurred)}</div><div class="hint">estimated ${money(f.estimatedTotal)}</div></div>
-      <div class="card ${f.remaining<0?'bad':''}"><div class="label">Remaining budget</div><div class="value">${money(f.remaining)}</div><div class="hint">budget − incurred</div></div>
-      <div class="card ${f.outstanding>0?'warn':''}"><div class="label">Outstanding payments</div><div class="value">${money(f.outstanding)}</div><div class="hint">paid ${money(f.paid)}</div></div>
+      <div class="card"><div class="label">Costs incurred</div><div class="value">${money(f.incurred)}</div><div class="hint">all tabs, actual amounts</div></div>
+      <div class="card ${f.remaining<0?'bad':''}"><div class="label">Remaining budget</div><div class="value">${money(f.remaining)}</div><div class="hint">budget − costs incurred</div></div>
+      <div class="card ${owedTotal>0?'warn':''}"><div class="label">Owed back to people</div><div class="value">${money(owedTotal)}</div><div class="hint">paid out of pocket, not yet repaid</div></div>
       <div class="card"><div class="label">Income received</div><div class="value">${money(f.received)}</div><div class="hint">sponsors ${money(f.sponsorReceived)} · other ${money(f.otherIncome)}</div></div>
-      <div class="card"><div class="label">Pledges (not cash)</div><div class="value">${money(f.pledged)}</div><div class="hint">${money(f.pledged-f.sponsorReceived)} still to collect</div></div>
-      <div class="card ${f.netCash<0?'bad':''}"><div class="label">Net cash position</div><div class="value">${money(f.netCash)}</div><div class="hint">received − paid</div></div>
-      <div class="card"><div class="label">Committed, not incurred</div><div class="value">${money(f.committedOpen)}</div><div class="hint">open purchases (not double-counted)</div></div>
+      <div class="card"><div class="label">Pledges still to collect</div><div class="value">${money(f.pledged-f.sponsorReceived)}</div><div class="hint">not counted as cash</div></div>
+      <div class="card ${f.netCash<0?'bad':''}"><div class="label">Net cash position</div><div class="value">${money(f.netCash)}</div><div class="hint">received − paid out</div></div>
     </div>
+
+    ${unassigned.length?`<div class="box" style="margin-top:14px;border-left:4px solid var(--warn)">
+      ⚠️ <b>${unassigned.length} cost(s) worth ${money(unassigned.reduce((s,r)=>s+r.actual,0))} have no "Paid by" name.</b>
+      If the event account paid them, leave it blank. If someone paid personally, open the item and enter their name.</div>`:''}
+    ${awaiting?`<p style="font-size:.85rem;color:var(--muted)">${awaiting} item(s) have a payer but no amount yet.</p>`:''}
+
     <div class="grid2">
-      <div class="box"><h3>Budget vs actual by category</h3>${Object.keys(cats).length?Object.entries(cats).map(([k,v])=>{
-        const mx=Math.max(...Object.values(cats).map(x=>Math.max(x.est,x.act)),1);
-        return `<div class="barrow"><div class="meta"><span>${esc(k)}</span><span>${money(v.act)} / ${money(v.est)} ${v.act>v.est?'⚠️ overrun':''}</span></div><div class="bar"><i style="width:${Math.round(v.act/mx*100)}%;${v.act>v.est?'background:var(--bad)':''}"></i></div></div>`}).join(''):'<div class="empty">No expenses yet.</div>'}
-        ${over.length?`<p style="color:var(--bad);font-size:.85rem">Overrun in: ${over.map(o=>esc(o[0])).join(', ')}</p>`:''}</div>
-      <div class="box"><h3>Expenses</h3>${renderTable(DB.expenses,[
-        {key:'description',label:'Description'},{key:'category',label:'Category'},
-        {key:'actual',label:'Actual',render:r=>money(r.actual)},
-        {key:'paid',label:'Paid',render:r=>money(r.paid)},
-        {key:'out',label:'Owed',render:r=>money(Math.max(0,num(r.actual)-num(r.paid)))}
-      ],{actions:r=>`<button class="btn small ghost" data-edit="${r.id}">Edit</button> <button class="btn small danger" data-del="${r.id}">✕</button>`,empty:'No expenses yet.'})}</div>
+      <div class="box"><h3>Who gets paid back</h3>
+        ${renderTable(people, [
+          {key:'name',label:'Person'},
+          {key:'items',label:'Items paid'},
+          {key:'paid',label:'Paid out of pocket',render:r=>money(r.paid)},
+          {key:'back',label:'Paid back',render:r=>money(r.back)},
+          {key:'owed',label:'Still owed',render:r=>`<b style="color:${r.owed>0?'var(--magenta)':r.owed<0?'var(--warn)':'var(--good)'}">${money(r.owed)}${r.owed<0?' (owes event)':''}</b>`}
+        ], {empty:'Set "Paid by" on any cost to see who is owed money.',
+            actions:r=>`<button class="btn small" data-pay="${esc(r.name)}" data-amt="${r.owed}">Record payback</button>`})}
+      </div>
+      <div class="box"><h3>Paid-back history</h3>
+        ${renderTable(reimb, [
+          {key:'date',label:'Date'},{key:'person',label:'Paid to'},
+          {key:'amount',label:'Amount',render:r=>money(r.amount)},
+          {key:'method',label:'Method'},{key:'reference',label:'Reference'}
+        ], {empty:'No payments back recorded yet.', actions:r=>`<button class="btn small danger" data-del-pay="${r.id}">✕</button>`})}
+      </div>
     </div>
-    <div class="grid2">
-      <div class="box"><h3>Income</h3>${renderTable(DB.income,[
+
+    <div class="box" style="margin-top:14px"><h3>All costs across every tab</h3>
+      <div class="toolbar">
+        <select id="finSource" aria-label="Filter by tab"><option value="">All tabs</option>${sources.map(s=>`<option ${s===FIN.source?'selected':''}>${esc(s)}</option>`).join('')}</select>
+        <select id="finPerson" aria-label="Filter by person"><option value="">Everyone</option>${persons.map(p=>`<option ${p===FIN.person?'selected':''}>${esc(p)}</option>`).join('')}</select>
+        <span style="font-size:.9rem;color:var(--muted)">${shown.length} item(s) · estimated ${money(shownEst)} · actual <b>${money(shownActual)}</b></span>
+      </div>
+      ${renderTable(shown, [
+        {key:'source',label:'Tab'},
+        {key:'name',label:'Item'},
+        {key:'category',label:'Category'},
+        {key:'paidBy',label:'Paid by',render:r=>r.paidBy?esc(r.paidBy):'<span style="color:var(--muted)">event account</span>'},
+        {key:'est',label:'Estimated',render:r=>money(r.est)},
+        {key:'actual',label:'Actual',render:r=>money(r.actual)}
+      ], {empty:'No costs yet. Add food, purchases, logistics or expenses in their tabs.',
+          actions:r=> r.tab==='finance'
+            ? `<button class="btn small ghost" data-edit-exp="${r.id}">Edit</button> <button class="btn small danger" data-del-exp="${r.id}">✕</button>`
+            : `<button class="btn small ghost" data-go="${r.tab}">Open tab</button>`})}
+    </div>
+
+    <div class="box" style="margin-top:14px"><h3>Income</h3>
+      ${renderTable(DB.income, [
         {key:'source',label:'Source'},{key:'amount',label:'Amount',render:r=>money(r.amount)},{key:'date',label:'Date'},{key:'method',label:'Method'}
-      ],{actions:r=>`<button class="btn small danger" data-incdel="${r.id}">✕</button>`,empty:'No other income yet. Sponsor funds are counted from Sponsorships.'})}</div>
-      <div class="box"><h3>Definitions</h3><p style="font-size:.85rem;color:var(--muted)">Outstanding = incurred − paid. Net cash = income received − paid. Remaining = approved budget − incurred. Pledges are shown separately and are not cash until received. Purchases, menu items and logistics are costed once at source.</p></div>
-    </div>`;
+      ], {actions:r=>`<button class="btn small danger" data-incdel="${r.id}">✕</button>`, empty:'No other income yet. Sponsor funds come from the Sponsorships tab.'})}
+    </div>
+
+    <p style="font-size:.85rem;color:var(--muted);margin-top:12px">Costs are counted once, where they're entered. Owed to a person = what they paid − what was paid back to them. Dance and game costs count as actual once entered. Paybacks count as cash going out, so don't also change a payment status to Paid for the same item.</p>`;
+
+  document.getElementById('addPay').onclick=()=> openPayback('', 0);
   document.getElementById('addExp').onclick=()=> openDialog('New expense', expFields(), {category:'Miscellaneous'}, d=>{ addRecord('expenses', d, 'finance', 'Expense added'); renderFinance(); renderDashboard(); });
   document.getElementById('addInc').onclick=()=> openDialog('New income', incomeFields(), {}, d=>{ addRecord('income', d, 'finance', 'Income added'); renderFinance(); renderDashboard(); });
-  document.getElementById('exportFin').onclick=()=> download(`finance-${todayISO()}.csv`, toCSV(DB.expenses.map(e=>({...e,owed:Math.max(0,num(e.actual)-num(e.paid))}))));
-  panel.querySelectorAll('[data-edit]').forEach(b=> b.onclick=()=>{ const id=b.dataset.edit; openDialog('Edit expense', expFields(), DB.expenses.find(x=>x.id===id), d=>{ updateRecord('expenses', id, d, 'finance', 'Edited'); renderFinance(); renderDashboard(); }); });
-  panel.querySelectorAll('[data-del]').forEach(b=> b.onclick=()=>{ const id=b.dataset.del; confirmDialog('Delete this expense? Only this one record is removed.', ()=>{ deleteRecord('expenses', id, 'finance'); renderFinance(); renderDashboard(); }); });
-  panel.querySelectorAll('[data-incdel]').forEach(b=> b.onclick=()=>{ const id=b.dataset.incdel; confirmDialog('Delete this income entry?', ()=>{ deleteRecord('income', id, 'finance'); renderFinance(); renderDashboard(); }); });
+  document.getElementById('exportFin').onclick=()=> download(`ledger-${todayISO()}.csv`, toCSV(rows.map(r=>({tab:r.source, item:r.name, category:r.category, paid_by:r.paidBy, estimated:r.est, actual:r.actual}))));
+  document.getElementById('finSource').onchange=e=>{ FIN.source=e.target.value; renderFinance(); };
+  document.getElementById('finPerson').onchange=e=>{ FIN.person=e.target.value; renderFinance(); };
+  panel.onclick=e=>{
+    const pay=e.target.closest('[data-pay]'); if(pay) return openPayback(pay.dataset.pay, Number(pay.dataset.amt));
+    const go=e.target.closest('[data-go]'); if(go) return showTab(go.dataset.go);
+    const ed=e.target.closest('[data-edit-exp]');
+    if(ed){ const id=ed.dataset.editExp; return openDialog('Edit expense', expFields(), DB.expenses.find(x=>x.id===id), d=>{ updateRecord('expenses', id, d, 'finance', 'Edited'); renderFinance(); renderDashboard(); }); }
+    const de=e.target.closest('[data-del-exp]');
+    if(de){ const id=de.dataset.delExp; return confirmDialog('Delete this expense? Only this one record is removed.', ()=>{ deleteRecord('expenses', id, 'finance'); renderFinance(); renderDashboard(); }); }
+    const dp=e.target.closest('[data-del-pay]');
+    if(dp){ const id=dp.dataset.delPay; return confirmDialog('Delete this payback record? The amount owed to that person goes up again.', ()=>{ deleteRecord('reimbursements', id, 'reimbursement'); renderFinance(); renderDashboard(); }); }
+    const di=e.target.closest('[data-incdel]');
+    if(di){ const id=di.dataset.incdel; return confirmDialog('Delete this income entry?', ()=>{ deleteRecord('income', id, 'finance'); renderFinance(); renderDashboard(); }); }
+  };
 }
 
 /* ============ ACTIVITIES, GAMES, DANCE & FUN ============ */
 function actFields(){
   return [
+    {key:'paidBy',label:'Paid by (person)'},
     {key:'name',label:'Activity',required:true,full:true},
     {key:'start',label:'Start time',type:'time'},
     {key:'end',label:'End time',type:'time'},
@@ -1003,6 +1123,7 @@ function renderActivities(){
 }
 function gameFields(){
   return [
+    {key:'paidBy',label:'Paid by (person)'},
     {key:'name',label:'Game',required:true,full:true},
     {key:'audience',label:'Audience',type:'select',options:['Kids','Adults','Family','All']},
     {key:'ageGroup',label:'Age group'},
@@ -1151,7 +1272,7 @@ const BUILTIN_TABS = [
   {id:'settings',title:'Settings',icon:'⚙️',fixed:true}
 ];
 // Audit record types used by Version History (so restore can find the collection)
-const RT = {registrations:'registration',waitlist:'waitlist',logistics:'logistics',menu:'catering',purchases:'purchase',sponsors:'sponsorship',expenses:'finance',activities:'activity',games:'game',performances:'performance'};
+const RT = {registrations:'registration',waitlist:'waitlist',logistics:'logistics',menu:'catering',purchases:'purchase',sponsors:'sponsorship',expenses:'finance',activities:'activity',games:'game',performances:'performance',reimbursements:'reimbursement'};
 
 const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 const slug = s => norm(s).replace(/ /g,'-') || 'data';
@@ -1377,6 +1498,7 @@ function exportTemplate(id){
    3) review counts, skipped rows, duplicates, preview  4) confirm and import.
    Nothing is saved until step 4. */
 const SYN = {
+  paidBy:['paid by','payer','paid by person'],
   family:['family name','full name','family'], contact:['primary contact','contact name','contact person','contact'],
   phone:['phone number','phone','mobile','cell'], email:['email address','email','e mail'],
   address:['address'], adults:['number of adults','adults'], kids:['kids between','children','kids'],
@@ -1599,9 +1721,9 @@ connectFirebase().then(()=>{ ensureTabs(); renderNav(); renderAll(); renderHisto
 function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
 function categoryBars(){
   const cats = {};
-  DB.expenses.forEach(e=>{ cats[e.category] = cats[e.category]||{est:0,act:0}; cats[e.category].est+=num(e.estimated); cats[e.category].act+=num(e.actual); });
+  ledger().forEach(r=>{ const c=r.category||'Miscellaneous'; cats[c]=cats[c]||{est:0,act:0}; cats[c].est+=r.est; cats[c].act+=r.actual; });
   const keys = Object.keys(cats);
-  if(!keys.length) return '<div class="empty">Add expenses in Finance to see spending by category.</div>';
+  if(!keys.length) return '<div class="empty">Costs from every tab appear here once they are entered.</div>';
   const max = Math.max(...keys.map(k=>Math.max(cats[k].est,cats[k].act)),1);
   return keys.map(k=>`
     <div class="barrow"><div class="meta"><span>${esc(k)}</span><span>${money(cats[k].act)} / ${money(cats[k].est)} ${cats[k].act>cats[k].est?'⚠️ over':''}</span></div>
@@ -1609,6 +1731,7 @@ function categoryBars(){
 }
 function perfFields(){
   return [
+    {key:'paidBy',label:'Paid by (person)'},
     {key:'name',label:'Performance',required:true,full:true},
     {key:'group',label:'Participant / group'},
     {key:'coordinator',label:'Coordinator'},
